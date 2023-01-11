@@ -2,10 +2,12 @@
 const path = require('path');
 const { Router } = require('express');
 
+const rootDirectory = require('../util/path');
+
 const adminRouter = Router();
 
 adminRouter.get('/add-product', (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
+  res.sendFile(path.join(rootDirectory, 'views', 'add-product.html'));
 });
 
 adminRouter.post('/add-product', (req, res, next) => {
