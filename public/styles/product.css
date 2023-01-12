@@ -11,7 +11,7 @@ main {
 .main-header {
   width: 100%;
   height: 3.5rem;
-  background-color: #fde249;
+  background-color: #FAD02C;
   padding: 0 1.5rem;
 }
 
@@ -42,7 +42,7 @@ main {
 .main-header__item a:hover,
 .main-header__item a:active,
 .main-header__item a.active {
-  color: #0254b1;
+  color: #90ADC6;
 }
 
 .product-form {
@@ -62,27 +62,33 @@ main {
 }
 
 .form-control label {
+  display: block;
+  width: 100%;
   margin-left:10px;
-  color: #0254b1;
+  color: #333652;
   font-weight: 700;
-
   font-size: 1.1rem;
 }
 
 .form-control input {
-  border: 1px solid #fde249;
+  border: 1px solid #FAD02C;
   font: inherit;
   border-radius: 5px;
   margin: 10px;
   height: 30px;
 }
 
+.form-control input:focus {
+  border: none;
+  outline: 1px solid #90ADC6;
+}
+
 button {
   font: inherit;
   font-weight: 600;
-  border: 1px solid #fde249;
-  color: #0254b1;
-  background: #fde249;
+  border: 1px solid #FAD02C;
+  color: #fff;
+  background: #FAD02C;
   border-radius: 5px;
   cursor: pointer;
   margin: 10px;
@@ -92,7 +98,7 @@ button {
 
 button:hover,
 button:active {
-  background-color: #0254b1;
-  border: 1px solid #0254b1;
-  color: white;
+  background-color: #90ADC6;
+  border: 1px solid #90ADC6;
+  color: #333652;
 }

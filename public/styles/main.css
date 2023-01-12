@@ -11,7 +11,7 @@ main {
 .main-header {
   width: 100%;
   height: 3.5rem;
-  background-color: #fde249;
+  background-color: #FAD02C;
   padding: 0 1.5rem;
 }
 
@@ -42,7 +42,7 @@ main {
 .main-header__item a:hover,
 .main-header__item a:active,
 .main-header__item a.active {
-  color: #0254b1;
+  color: #90ADC6;
 }
 
 .product-form {
@@ -62,15 +62,15 @@ main {
 }
 
 .form-control input {
-  border: 1px solid #fde249;
+  border: 1px solid #FAD02C;
   font: inherit;
   border-radius: 2px;
 }
 
 button {
   font: inherit;
-  border: 1px solid #0254b1;
-  color: #0254b1;
+  border: 1px solid #90ADC6;
+  color: #90ADC6;
   background: white;
   border-radius: 3px;
   cursor: pointer;
@@ -78,6 +78,72 @@ button {
 
 button:hover,
 button:active {
-  background-color: #0254b1;
+  background-color: #90ADC6;
   color: white;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  width: 400px;
+  margin-bottom: 20px;
+}
+
+.card__header,
+.card__content {
+  padding: 1rem;
+  text-align: center;
+  color: #333652;
+}
+
+.card__header h1,
+.card__content h1,
+.card__content h2,
+.card__content p {
+  margin: 0;
+  color: #333652;
+}
+
+.card__image {
+  width: 400px;
+}
+
+.card__image img {
+  width: 400px;
+}
+
+.card__actions {
+    padding: 1rem;
+    text-align: center;
+}
+
+.card__actions button,
+.card__actions a {
+    margin: 0 0.25rem;
+}
+
+.btn {
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid #FAD02C;
+  color: #fff;
+  background: #FAD02C;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  height: 35px;
+  padding: 5px;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #90ADC6;
+  border: 1px solid #90ADC6;
+  color: #333652;
 }
