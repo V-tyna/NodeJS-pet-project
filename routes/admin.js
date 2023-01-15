@@ -11,7 +11,9 @@ adminRouter.get('/add-product', (req, res, next) => {
   // res.sendFile(path.join(rootDirectory, 'views', 'add-product.html'));
   res.render('add-product', {
     pageTitle: 'Add product page',
-    path: '/admin/add-product'
+    path: '/admin/add-product',
+    activeAddProd: true,
+    productCSS: true
   });
 });
 

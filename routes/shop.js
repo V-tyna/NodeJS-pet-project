@@ -11,6 +11,7 @@ shopRouter.get('/', (req, res, next) => {
   res.render('shop', {
     prods: products,
     pageTitle: 'Shop page',
+    activeShop: true,
     path: '/'
   });
   // res.sendFile(path.join(rootDirectory, 'views', 'shop.html'));
