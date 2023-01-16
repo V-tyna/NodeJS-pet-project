@@ -2,7 +2,8 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const path = require('path');
 
-const { adminRouter } = require('./routes/admin');
+const { getPageNotFound } = require('./controllers/error');
+const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
 
 const app = express();
@@ -25,11 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRouter);
 app.use(shopRouter);
 
-app.use((req, res, next) => {
-	res.status(404).render('404', {
-		pageTitle: 'Page not found',
-	});
-});
+app.use(getPageNotFound);
 
 app.listen(3000, () => {
 	console.log('Server is running on port: 3000.');

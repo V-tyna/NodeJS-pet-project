@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap');
+
 body {
   padding: 0;
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Crimson Text', serif;
 }
 
 main {
@@ -91,7 +93,7 @@ button:active {
 
 .card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  width: 400px;
+  width: 300px;
   margin-bottom: 20px;
 }
 
@@ -110,12 +112,19 @@ button:active {
   color: #333652;
 }
 
+.card__header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .card__image {
-  width: 400px;
+  width: 300px;
 }
 
 .card__image img {
-  width: 400px;
+  width: 300px;
 }
 
 .card__actions {
