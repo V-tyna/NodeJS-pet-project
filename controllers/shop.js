@@ -28,5 +28,11 @@ module.exports = {
       pageTitle: 'Checkout page',
       activeCheckout: true
     });
-  }
+  },
+  getOrders: async (req, res, next) => {
+    res.render('shop/orders', {
+      pageTitle: 'Orders page',
+      activeCart: true
+    });
+  },
 };

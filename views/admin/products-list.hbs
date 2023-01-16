@@ -1,1 +1,34 @@
-<h1>Admin products list page</h1>
+<main>
+	{{#if prods.length}}
+		<div class='grid'>
+			{{#each prods}}
+				<article class='card product-item'>
+					<header class='card__header'>
+						<h1 class='product__title'>
+							{{this.title}}
+						</h1>
+					</header>
+					<div class='card__image'>
+						<img src={{this.imageUrl}} alt={{this.title}} />
+					</div>
+					<div class='card__content'>
+						<h2 class='product__price'>{{this.price}}$</h2>
+						<p class='product__description'>
+							{{this.description}}
+						</p>
+					</div>
+					<div class='card__actions'>
+						<form action='/admin/edit-product' method='POST'>
+							<button class='btn' type="submit">Edit</button>
+						</form>
+						<form action='/admin/delete-product' method='POST'>
+							<button class='btn' type="submit">Delete</button>
+						</form>
+					</div>
+				</article>
+			{{/each}}
+		</div>
+	{{else}}
+		<h1>No products yet...</h1>
+	{{/if}}
+</main>

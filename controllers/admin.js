@@ -9,13 +9,16 @@ module.exports = {
     });
   },
   getProducts: async (req, res, next) => {
+    const prods = await Product.fetchAll();
     res.render('admin/products-list', {
       pageTitle: 'Admin products-list page',
-      activeAdminProducts: true
+      activeAdminProducts: true,
+      prods
     });
   },
   postAddProduct: async (req, res, next) => {
-    const product = new Product(req.body.title);
+    const { title, imageUrl, price, description } = req.body;
+    const product = new Product(title, imageUrl, price, description);
     await product.save();
     res.redirect('/');
   }

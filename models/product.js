@@ -5,8 +5,11 @@ const staticPath = require('../util/path');
 const p = path.join(staticPath, 'data', 'products.json');
 
 module.exports = class Product {
-	constructor(title) {
+	constructor(title, imageUrl, price, description) {
 		this.title = title;
+		this.imageUrl = imageUrl;
+		this.price = price;
+		this.description = description;
 	}
 
 	async save() {

@@ -72,15 +72,16 @@ main {
   font-size: 1.1rem;
 }
 
-.form-control input {
+.form-control input, .form-control textarea {
   border: 1px solid #FAD02C;
   font: inherit;
   border-radius: 5px;
   margin: 10px;
-  height: 30px;
+  min-height: 30px;
+  width: 100%;
 }
 
-.form-control input:focus {
+.form-control input:focus , .form-control textarea:focus {
   border: none;
   outline: 1px solid #90ADC6;
 }

@@ -95,6 +95,10 @@ button:active {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   width: 300px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .card__header,
@@ -120,21 +124,26 @@ button:active {
 }
 
 .card__image {
-  width: 300px;
+  max-width: 200px;
+  max-height: 200px;
 }
 
 .card__image img {
-  width: 300px;
+  max-width: 200px;
+  max-height: 200px;
 }
 
 .card__actions {
     padding: 1rem;
     text-align: center;
+    display: flex;
+    height: 35px;
 }
 
 .card__actions button,
 .card__actions a {
     margin: 0 0.25rem;
+    text-decoration: none;
 }
 
 .btn {
