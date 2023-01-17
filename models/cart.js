@@ -40,6 +40,25 @@ module.exports = class Cart {
     }
   }
 
+  static async deleteProductFromCart(id, price) {
+    const cart = await Cart.fetchAll();
+    const position = cart.products.find(p => p.id === id);
+    const positionIndex = cart.products.findIndex(p => p.id === id);
+    const updatedPos = { ...position };
+    let updatedProds = [...cart.products];
+    if (position.quantity > 1) {
+      updatedPos.quantity--;
+      updatedProds[positionIndex] = updatedPos;
+    } else {
+      updatedProds = cart.products.filter(p => p.id !== id);
+    }
+    const updatedPrice = cart.totalPrice - price;
+    const updatedCart = { products: updatedProds, totalPrice: updatedPrice };
+    fs.writeFile(pathToCart, JSON.stringify(updatedCart), (err) => {
+      console.log('Deleting position writing file error: ', err);
+    });
+  }
+
   static async updatePrice(id, difference) {
     const cart = await Cart.fetchAll();
     const productQuantity = cart.products.find(p => p.id ===id).quantity;

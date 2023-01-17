@@ -1,1 +1,34 @@
-<h1>Cart page</h1>
+{{#if products.length}}
+<table class="cart__table">
+ <tr class="cart__card__header">
+    <th></th>
+    <th>Product name</th>
+    <th>Price</th>
+    <th>Quantity</th>
+    <th>Common price</th>
+    <th></th>
+  </tr>
+{{#each products}}
+  <tr class="cart__card__body">
+    <th class="cart__image"><img src="{{this.imageUrl}}" alt="{{this.title}}"></th>
+    <th class="cart__text"><p>{{this.title}}</p></th>
+    <th class="cart__text"><p>{{this.price}}</p></th>
+    <th class="cart__text"><b>{{this.quantity}}</b></th>
+    <th class="cart__text"><b>{{#countPrice this.price this.quantity}}{{/countPrice}}</b></th>
+    <th class="cart__text delete__th">
+      <form action="/cart/delete" method="POST" class="cart__delete_form">
+        <input type="hidden" name="price" value="{{this.price}}">
+        <input type="hidden" name="productId" value="{{this.id}}">
+        <button class="btn__delete" type="submit"><i class="material-icons">delete</i></button>
+      </form>
+      </th>
+  </tr>
+{{/each}}
+  <tr class="cart__card__header">
+    <th>Total price</th>
+    <th class="cart__price" colspan="5">{{#getTotalPrice}}{{/getTotalPrice}}$</th>
+  </tr>
+</table>
+{{else}}
+<h1>No products in cart yet...</h1>
+{{/if}}

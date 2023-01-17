@@ -1,0 +1,58 @@
+.cart__table {
+	width: 55vw;
+	margin: 20px auto;
+}
+
+.cart__card__header {
+	height: 50px;
+	background-color: #90adc6;
+	font-size: 1.1rem;
+}
+
+.cart__card__body {
+	color: #333652;
+}
+
+.cart__card__body:nth-child(odd) {
+	background-color: #90adc665;
+}
+
+.cart__card__body:hover {
+	background-color: #fad12c6e;
+}
+
+.cart__image img {
+	height: 50px;
+}
+
+.cart__price {
+  padding-right: 124px;
+  text-align: end;
+}
+
+.cart__delete_form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.cart__delete_form i {
+  margin-top: 13px;
+}
+
+.btn__delete {
+  background: none;
+  border: none;
+  color: #333652;
+}
+
+.btn__delete:hover {
+  background: none;
+  border: none;
+  color: #90adc6;
+}
+
+.delete__th {
+  width: 40px;
+}
