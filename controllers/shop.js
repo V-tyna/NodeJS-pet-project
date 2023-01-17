@@ -1,3 +1,4 @@
+const Cart = require('../models/cart');
 const Product = require('../models/product');
 
 module.exports = {
@@ -7,6 +8,14 @@ module.exports = {
       prods: products,
       pageTitle: 'Products list page',
       activeProducts: true
+    });
+  },
+  getProductById: async (req, res, next) => {
+    const productId = req.params.productId;
+    const product = await Product.findProductById(productId);
+    res.render('shop/product-details', {
+      pageTitle: 'Product details page',
+      product
     });
   },
   getIndex: async (req, res, next) => {
@@ -23,6 +32,13 @@ module.exports = {
       activeCart: true
     });
   },
+  postCart: async (req, res, next) => {
+    const productId = req.body.productId;
+    const product = await Product.findProductById(productId);
+    const cart = await Cart.addProduct(productId, product.price);
+    console.log('Cart: ', product, cart);
+    res.redirect('/cart');
+  },
   getCheckout: (req, res, next) => {
     res.render('shop/checkout', {
       pageTitle: 'Checkout page',
@@ -34,5 +50,5 @@ module.exports = {
       pageTitle: 'Orders page',
       activeCart: true
     });
-  },
+  }
 };

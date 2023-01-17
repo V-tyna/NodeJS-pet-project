@@ -1,0 +1,18 @@
+<div class='details__product'>
+	<img
+		class='details__image'
+		src={{product.imageUrl}}
+		alt='{{product.title}}'
+	/>
+	<div class='details__container'>
+		<h1>{{product.title}}</h1>
+		<h3>{{product.price}}$</h3>
+		<p>{{product.description}}</p>
+		<div class='card__actions'>
+			<form action='/cart' method='POST'>
+				<button class='btn' type='submit'>Add to cart</button>
+        <input type="hidden" name="productId" value="{{product.id}}">
+			</form>
+		</div>
+	</div>
+</div>
