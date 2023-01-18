@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const staticPath = require('../util/path');
+const staticPath = require('../utils/path');
 const Cart = require('./cart');
 
 const pathToProducts = path.join(staticPath, 'data', 'products.json');
@@ -16,7 +16,6 @@ module.exports = class Product {
 
 	async save() {
 		const products = await Product.fetchAll();
-		console.log('Prod id in model', this.id);
 		if (this.id) {
 			const exitingProductIndex = products.findIndex(p => p.id === this.id);
 			const updatedProducts = [...products];

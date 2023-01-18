@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const staticPath = require('../util/path');
+const staticPath = require('../utils/path');
 
 const pathToCart = path.join(staticPath, 'data', 'cart.json');
 

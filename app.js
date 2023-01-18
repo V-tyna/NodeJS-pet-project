@@ -5,6 +5,7 @@ const path = require('path');
 const { getPageNotFound } = require('./controllers/error');
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
+const db = require('./utils/databaseSQL');
 
 const app = express();
 
@@ -14,12 +15,18 @@ app.engine(
 		extname: '.hbs',
 		layoutsDir: 'views/layouts',
 		defaultLayout: 'main-layout',
-		helpers: require('./util/handlebars-helpers'),
+		helpers: require('./utils/handlebars-helpers'),
 	})
 );
 app.set('view engine', 'hbs');
 // app.set('view engine', 'pug');
 app.set('views', 'views');
+
+db.execute('SELECT * FROM products')
+	.then((data) => {
+		console.log('Data from SQLDB', data[0]);
+	})
+	.catch((e) => console.log(e));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
