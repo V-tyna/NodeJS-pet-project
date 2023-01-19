@@ -1,1 +1,23 @@
-[{"title":"J. R. R. Tolkien \"The Lord of the Rings\"","imageUrl":"https://m.media-amazon.com/images/I/51kfFS5-fnL._SX332_BO1,204,203,200_.jpg","price":"20.90","description":"In ancient times the Rings of Power were crafted by the Elven-smiths, and Sauron, the Dark Lord, forged the One Ring, filling it with his own power so that he could rule all others.","id":"105739358999"},{"title":"J. R. R. Tolkien \"The Hobbit\"","imageUrl":"https://m.media-amazon.com/images/I/413V3sIKSJL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg","price":"27.49","description":"The journey through Middle-earth begins here with J.R.R. Tolkien's classic prelude to his Lord of the Rings trilogy.","id":"1011322429702"}]
+[
+  {
+    "title": "J. R. R. Tolkien \"The Lord of the Rings\"",
+    "imageUrl": "https://m.media-amazon.com/images/I/51kfFS5-fnL._SX332_BO1,204,203,200_.jpg",
+    "price": "20.90",
+    "description": "In ancient times the Rings of Power were crafted by the Elven-smiths, and Sauron, the Dark Lord, forged the One Ring, filling it with his own power so that he could rule all others.",
+    "id": "105739358999"
+  },
+  {
+    "title": "J. R. R. Tolkien \"The Hobbit\"",
+    "imageUrl": "https://m.media-amazon.com/images/I/413V3sIKSJL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg",
+    "price": "27.49",
+    "description": "The journey through Middle-earth begins here with J.R.R. Tolkien's classic prelude to his Lord of the Rings trilogy.",
+    "id": "1011322429702"
+  },
+  {
+    "title": "Harper Lee \"To Kill a Mockingbird\"",
+    "imageUrl": "https://m.media-amazon.com/images/I/51IXWZzlgSL._SX330_BO1,204,203,200_.jpg",
+    "price": "11.54",
+    "description": "Harper Lee's Pulitzer Prize-winning masterwork of honor and injustice in the deep South—and the heroism of one man in the face of blind and violent hatred.",
+    "id": "1544059887782"
+  }
+]
