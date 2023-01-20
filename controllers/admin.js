@@ -1,4 +1,4 @@
-const Product = require('../models/productSequelize'); // Sequelize
+const Product = require('../models/sequelize/product');
 
 const deepClone = require('../utils/deepClone');
 
@@ -17,8 +17,10 @@ module.exports = {
 			return res.redirect('/');
 		}
 		try {
-			const prod = await Product.findByPk(productId);
-			const product = deepClone(prod);
+			const prod = await req.user.getProducts({ where: { id: productId } });
+			console.log('Product belong to user: ', prod[0].title);
+			// const prod = await Product.findByPk(productId);
+			const product = deepClone(prod[0]);
 			res.render('admin/edit-product', {
 				pageTitle: 'Edit product page',
 				productCSS: true,
@@ -52,21 +54,21 @@ module.exports = {
 		}
 	},
 	postDeleteProduct: async (req, res, next) => {
-    try {
-      const { productId, price } = req.body;
-      await Product.destroy({
-        where: {
-          id: productId
-        }
-      });
-      res.redirect('/admin/products-list');
-    } catch(e) {
-      console.log('Deleting product error: ', e);
-    }
+		try {
+			const { productId, price } = req.body;
+			await Product.destroy({
+				where: {
+					id: productId,
+				},
+			});
+			res.redirect('/admin/products-list');
+		} catch (e) {
+			console.log('Deleting product error: ', e);
+		}
 	},
 	getProducts: async (req, res, next) => {
 		try {
-			const products = await Product.findAll();
+			const products = await req.user.getProducts();
 			const prods = deepClone(products);
 			res.render('admin/products-list', {
 				pageTitle: 'Admin products-list page',
@@ -80,7 +82,13 @@ module.exports = {
 	postAddProduct: async (req, res, next) => {
 		try {
 			const { title, imageUrl, price, description } = req.body;
-			await Product.create({ title, imageUrl, price, description });
+			await req.user.createProduct({
+				title,
+				imageUrl,
+				price,
+				description,
+			});
+			// await Product.create({ title, imageUrl, price, description, userId: req.user.id});
 			res.redirect('/');
 		} catch (e) {
 			console.log('Add product error:', e);
