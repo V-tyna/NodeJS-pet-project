@@ -1,1 +1,17 @@
 <h1>Orders page</h1>
+{{#if orders.length}}
+  <div>
+    {{#each orders}}
+    <h3>Order number: {{this.id}}</h3>
+    <p>Date: {{#getDateAndTime this.createdAt}}{{/getDateAndTime}}</p>
+    <ul>
+      {{#each this.products}} 
+        <li>{{title}}</li>
+      {{/each}}
+    </ul>
+    <p>Address: {{this.address}}</p>
+    {{/each}}
+  </div>
+{{else}}
+<h2>No orders yet...</h2>
+{{/if}}

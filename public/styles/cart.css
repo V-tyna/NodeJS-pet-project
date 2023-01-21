@@ -57,3 +57,18 @@
 .delete__th {
   width: 40px;
 }
+
+.create__order__form {
+  width: 55vw;
+	margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.create__order__button__area {
+  width: 55vw;
+	margin: 20px auto;
+  display: flex;
+  justify-content: end;
+}

@@ -1,5 +1,4 @@
-const prices = [];
-let totalPrice = 0;
+let prices = [];
 
 module.exports = {
   countPrice(a, b, options) {
@@ -7,10 +6,15 @@ module.exports = {
     prices.push(result);
     return '' + result.toFixed(2);
   },
+  getDateAndTime(str) {
+    const date = new Date(str).toLocaleDateString();
+    const hours = new Date(str).getHours();
+    const minutes = new Date(str).getHours();
+    return `${date}, ${hours}:${minutes}`;
+  },
   getTotalPrice() {
-    if (totalPrice === 0) {
-      totalPrice = prices.reduce((a, b) => a += b).toFixed(2);
-    }
+    const totalPrice = prices.reduce((a, b) => a += b).toFixed(2);
+    prices = [];
     return totalPrice;
   }
 }

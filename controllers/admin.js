@@ -4,7 +4,7 @@ const deepClone = require('../utils/deepClone');
 
 module.exports = {
 	getAddProduct: (req, res, next) => {
-		res.render('admin/edit-product', {
+		return res.render('admin/edit-product', {
 			pageTitle: 'Add product page',
 			activeAddProd: true,
 			productCSS: true,
@@ -48,7 +48,7 @@ module.exports = {
 					},
 				}
 			);
-			res.redirect('/admin/products-list');
+			return res.redirect('/admin/products-list');
 		} catch (e) {
 			console.log('Update product error: ', e);
 		}
@@ -61,7 +61,7 @@ module.exports = {
 					id: productId,
 				},
 			});
-			res.redirect('/admin/products-list');
+			return res.redirect('/admin/products-list');
 		} catch (e) {
 			console.log('Deleting product error: ', e);
 		}
@@ -70,7 +70,7 @@ module.exports = {
 		try {
 			const products = await req.user.getProducts();
 			const prods = deepClone(products);
-			res.render('admin/products-list', {
+			return res.render('admin/products-list', {
 				pageTitle: 'Admin products-list page',
 				activeAdminProducts: true,
 				prods,
@@ -89,7 +89,7 @@ module.exports = {
 				description,
 			});
 			// await Product.create({ title, imageUrl, price, description, userId: req.user.id});
-			res.redirect('/');
+			return res.redirect('/');
 		} catch (e) {
 			console.log('Add product error:', e);
 		}
