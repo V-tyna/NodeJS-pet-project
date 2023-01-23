@@ -1,6 +1,6 @@
-const Product = require('../models/sequelize/product');
+const Product = require('../../models/sequelize/product');
 
-const deepClone = require('../utils/deepClone');
+const deepClone = require('../../utils/deepClone');
 
 module.exports = {
 	getAddProduct: (req, res, next) => {

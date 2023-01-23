@@ -18,7 +18,7 @@
     <th class="cart__text delete__th">
       <form action="/cart/delete" method="POST" class="cart__delete_form">
         <input type="hidden" name="price" value="{{this.price}}">
-        <input type="hidden" name="productId" value="{{this.id}}">
+        <input type="hidden" name="productId" value="{{this._id}}">
         <button class="btn__delete" type="submit"><i class="material-icons">delete</i></button>
       </form>
       </th>

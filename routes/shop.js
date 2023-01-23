@@ -1,5 +1,15 @@
 const { Router } = require('express');
-const { getProducts, getIndex, getCart, getCheckout, getOrders, getProductById, postCart, postDeleteProductFromCart, postOrder } = require('../controllers/shop');
+const {
+	getProducts,
+	getIndex,
+	getCart,
+	getCheckout,
+	getOrders,
+	getProductById,
+	postCart,
+	postDeleteProductFromCart,
+	postOrder,
+} = require('../controllers/mongoDB/shop');
 
 const shopRouter = Router();
 

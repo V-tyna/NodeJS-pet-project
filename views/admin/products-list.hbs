@@ -18,11 +18,11 @@
 						</p>
 					</div>
 					<div class='card__actions'>
-						<a href='/admin/edit-product/{{this.id}}?edit=true'>
+						<a href='/admin/edit-product/{{this._id}}?edit=true'>
 							<button class='btn' type="submit">Edit</button>
 						</a>
 						<form action='/admin/delete-product' method='POST'>
-							<input type="hidden" name="productId" value={{this.id}}>
+							<input type="hidden" name="productId" value={{this._id}}>
 							<input type="hidden" name="price" value={{this.price}}>
 							<button class='btn' type="submit">Delete</button>
 						</form>

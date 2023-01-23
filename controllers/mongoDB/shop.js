@@ -1,11 +1,11 @@
-const Product = require('../models/sequelize/product');
+const Product = require('../../models/mongoDB/product');
 
-const deepClone = require('../utils/deepClone');
+const deepClone = require('../../utils/deepClone');
 
 module.exports = {
 	getProducts: async (req, res, next) => {
     try {
-			const products = await req.user.getProducts();
+			const products = await Product.fetchAll();
       const prods = deepClone(products);
       res.render('shop/products-list', {
         prods,
@@ -18,9 +18,9 @@ module.exports = {
 	},
 	getProductById: async (req, res, next) => {
     try {
-      const productId = req.params.productId;
-			const prod = await req.user.getProducts({ where: { id: productId } });
-      const product = deepClone(prod[0]);
+      const { productId } = req.params;
+			const prod = await Product.findProductById(productId);
+      const product = deepClone(prod);
       res.render('shop/product-details', {
         pageTitle: 'Product details page',
         product,
@@ -31,7 +31,7 @@ module.exports = {
 	},
 	getIndex: async (req, res, next) => {
     try {
-			const products = await req.user.getProducts();
+			const products = await Product.fetchAll();
       const prods = deepClone(products);
       return res.render('shop/index', {
         prods,
