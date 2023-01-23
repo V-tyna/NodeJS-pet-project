@@ -1,33 +1,36 @@
 const { ObjectId } = require('mongodb');
 
 const { db } = require('../../utils/mongoDB');
+const User = require('./user');
 
 class Product {
-  constructor(title, imageUrl, price, description) {
+  constructor(title, imageUrl, price, description, userId) {
 		this.title = title;
 		this.imageUrl = imageUrl;
 		this.price = price;
 		this.description = description;
+    this.userId = userId;
 	}
 
-  async save() {
-    return await db.collection('products').insertOne(this);
+  save() {
+    return db.collection('products').insertOne(this);
   }
 
-  static async fetchAll() {
-    return await db.collection('products').find().toArray();
+  static fetchAll() {
+    return db.collection('products').find().toArray();
   }
 
-  static async findProductById(id) {
-    return await db.collection('products').findOne({ _id: new ObjectId(id) });
+  static findProductById(id) {
+    return db.collection('products').findOne({ _id: new ObjectId(id) });
   }
 
-  static async deleteProduct(id) {
-    return await db.collection('products').findOneAndDelete({ _id: new ObjectId(id) });
+  static async deleteProduct(id, user) {
+    await User.deleteProductFromTheCart(id, user);
+    return db.collection('products').findOneAndDelete({ _id: new ObjectId(id) });
   }
 
-  static async updateProduct(id, obj) {
-    return await db.collection('products').findOneAndUpdate({ _id: new ObjectId(id) }, { $set: obj});
+  static updateProduct(id, obj) {
+    return db.collection('products').findOneAndUpdate({ _id: new ObjectId(id) }, { $set: obj});
   }
 }
 

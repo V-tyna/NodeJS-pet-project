@@ -47,7 +47,7 @@ module.exports = {
 	postDeleteProduct: async (req, res, next) => {
 		try {
 			const { productId } = req.body;
-			await Product.deleteProduct(productId);
+			await Product.deleteProduct(productId, req.user);
 			return res.redirect('/admin/products-list');
 		} catch (e) {
 			console.log('Deleting product error: ', e);
@@ -69,7 +69,8 @@ module.exports = {
 	postAddProduct: async (req, res, next) => {
 		try {
 			const { title, imageUrl, price, description } = req.body;
-			const product = new Product(title, imageUrl, price, description);
+			const { _id: userId } = req.user;
+			const product = new Product(title, imageUrl, price, description, userId);
 			await product.save();
 			return res.redirect('/admin/products-list');
 		} catch (e) {
