@@ -10,13 +10,13 @@ h1 {
 .order__card {
   margin: 20px auto;
   padding: 20px;
-  background-color: #90adc665;
+  background-color: #90adc61f;
   border-radius: 10px;
   box-shadow: 2px 2px 5px #90adc6;
 }
 
 .number__price {
-  color: #03c1af;
+  color: #cfac22;
 }
 
 .order__table {
@@ -28,7 +28,7 @@ h1 {
 }
 
 .order_table_row {
-  background-color: #03c1af14;
+  background-color: #FAD02C1f;
 }
 
 .order_table_row td {

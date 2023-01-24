@@ -6,7 +6,7 @@ const {
 	getEditProduct,
 	postEditProduct,
 	postDeleteProduct,
-} = require('../controllers/mongoDB/admin');
+} = require('../controllers/mongoose/admin');
 
 const adminRouter = Router();
 

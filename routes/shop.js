@@ -9,7 +9,7 @@ const {
 	postCart,
 	postDeleteProductFromCart,
 	postOrder,
-} = require('../controllers/mongoDB/shop');
+} = require('../controllers/mongoose/shop');
 
 const shopRouter = Router();
 
