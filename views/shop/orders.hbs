@@ -1,15 +1,29 @@
-<h1>Orders page</h1>
+<h1>Your orders</h1>
 {{#if orders.length}}
-  <div>
+  <div class="order__card_container">
     {{#each orders}}
-    <h3>Order number: {{this._id}}</h3>
-    <p>Date: {{#getDateAndTime this.createdAt}}{{/getDateAndTime}}</p>
-    <ul>
-      {{#each this.products}} 
-        <li>{{title}}</li>
-      {{/each}}
-    </ul>
-    <p>Address: {{this.address}}</p>
+    <div class="order__card">
+      <h3>Order number: <span class="number__price">{{this._id}}</span></h3>
+      <p>Date: {{#getDateAndTime this.createdAt}}{{/getDateAndTime}}</p>
+      <table class="order__table">
+        <tbody>
+          <tr class="order_table_header">
+            <th>Name</th> 
+            <th>Quantity</th> 
+            <th>Price</th>  
+          </tr>
+          {{#each this.order}} 
+          <tr class="order_table_row">
+            <td>{{title}}</td>
+            <td>{{quantity}}</td>
+            <td>{{price}}$</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <p>Delivery address: {{this.address}}</p>
+      <b>Total order price: <span class="number__price">{{this.totalPrice}}$</span></b>
+    </div>
     {{/each}}
   </div>
 {{else}}

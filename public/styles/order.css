@@ -1,0 +1,37 @@
+h1 {
+  text-align: center;
+}
+
+.order__card_container {
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.order__card {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #90adc665;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px #90adc6;
+}
+
+.number__price {
+  color: #03c1af;
+}
+
+.order__table {
+  width: 100%;
+}
+
+.order_table_header th {
+  background-color: #90adc6;
+}
+
+.order_table_row {
+  background-color: #03c1af14;
+}
+
+.order_table_row td {
+  text-align: center;
+  color: #333652;
+}

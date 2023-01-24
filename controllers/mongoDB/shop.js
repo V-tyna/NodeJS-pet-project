@@ -45,15 +45,8 @@ module.exports = {
 	},
 	getCart: async (req, res, next) => {
 		try {
-			const cartProducts = await User.getCart(req.user.cart);
-			const products = deepClone(cartProducts).map((el) => {
-				return {
-					...el,
-					quantity: req.user.cart.items.find((item) => {
-						return item.productId.toString() === el._id.toString();
-					}).quantity,
-				};
-			});
+			const cartProducts = await User.getCart(req.user);
+			const products = deepClone(cartProducts);
 			return res.render('shop/cart', {
 				pageTitle: 'Cart page',
 				activeCart: true,
@@ -85,10 +78,9 @@ module.exports = {
 	},
 	getOrders: async (req, res, next) => {
 		try {
-			const fetchedOrders = await req.user.getOrders({
-				include: ['products'],
-			});
+			const fetchedOrders = await User.getOrders(req.user._id);
 			const orders = deepClone(fetchedOrders);
+			console.log('ORDERS:', orders);
 			return res.render('shop/orders', {
 				pageTitle: 'Orders page',
 				activeOrders: true,
@@ -100,25 +92,8 @@ module.exports = {
 	},
 	postOrder: async (req, res, next) => {
 		try {
-			const cart = await req.user.getCart();
-			const products = await cart.getProducts();
-			console.log(
-				'Products: ',
-				products.map((el) => ({
-					title: el.title,
-					quantity: el.cartItem.quantity,
-				}))
-			);
-			const order = await req.user.createOrder({
-				address: req.body.address,
-			});
-			await order.addProducts(
-				products.map((product) => {
-					product.orderItem = { quantity: product.cartItem.quantity };
-					return product;
-				})
-			);
-			await cart.setProducts(null);
+			const { address } = req.body;
+			const result = await User.addOrder(req.user, address);
 			return res.redirect('/orders');
 		} catch (e) {
 			console.log('Making post order error: ', e);
