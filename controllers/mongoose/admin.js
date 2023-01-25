@@ -5,8 +5,9 @@ const deepClone = require('../../utils/deepClone');
 module.exports = {
 	getAddProduct: (req, res, next) => {
 		return res.render('admin/edit-product', {
-			pageTitle: 'Add product page',
 			activeAddProd: true,
+			isAuthenticated: req.session.isLoggedIn,
+			pageTitle: 'Add product page',
 			productCSS: true,
 		});
 	},
@@ -20,10 +21,11 @@ module.exports = {
 			const prod = await Product.findById(productId);
 			const product = deepClone(prod);
 			res.render('admin/edit-product', {
-				pageTitle: 'Edit product page',
-				productCSS: true,
+				isAuthenticated: req.session.isLoggedIn,
 				editing: editMode,
+				pageTitle: 'Edit product page',
 				product,
+				productCSS: true,
 			});
 		} catch (e) {
 			console.log('Product not found.');
@@ -59,8 +61,9 @@ module.exports = {
 			const products = await Product.find({ userId: req.user._id });
 			const prods = deepClone(products);
 			return res.render('admin/products-list', {
-				pageTitle: 'Admin products-list page',
 				activeAdminProducts: true,
+				isAuthenticated: req.session.isLoggedIn,
+				pageTitle: 'Admin products-list page',
 				prods,
 			});
 		} catch {

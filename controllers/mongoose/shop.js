@@ -10,9 +10,10 @@ module.exports = {
 			const products = await Product.find();
 			const prods = deepClone(products);
 			res.render('shop/products-list', {
-				prods,
-				pageTitle: 'Products list page',
 				activeProducts: true,
+				isAuthenticated: req.session.isLoggedIn,
+				pageTitle: 'Products list page',
+				prods,
 			});
 		} catch (e) {
 			console.log('Get products in shop page error: ', e);
@@ -24,6 +25,7 @@ module.exports = {
 			const prod = await Product.findById(productId);
 			const product = deepClone(prod);
 			res.render('shop/product-details', {
+				isAuthenticated: req.session.isLoggedIn,
 				pageTitle: 'Product details page',
 				product,
 			});
@@ -35,10 +37,12 @@ module.exports = {
 		try {
 			const products = await Product.find();
 			const prods = deepClone(products);
+			console.log('AUTH: ', req.session.isLoggedIn);
 			return res.render('shop/index', {
+				activeShop: true,
+				isAuthenticated: req.session.isLoggedIn,
 				prods,
 				pageTitle: 'Home page',
-				activeShop: true,
 			});
 		} catch (e) {
 			console.log('Get products in index/home page error: ', e);
@@ -57,8 +61,9 @@ module.exports = {
 			}));
 			const products = deepClone(cartProducts);
 			return res.render('shop/cart', {
-				pageTitle: 'Cart page',
 				activeCart: true,
+				isAuthenticated: req.session.isLoggedIn,
+				pageTitle: 'Cart page',
 				products,
 			});
 		} catch (e) {
@@ -78,8 +83,9 @@ module.exports = {
 	getCheckout: (req, res, next) => {
 		try {
 			return res.render('shop/checkout', {
-				pageTitle: 'Checkout page',
 				activeCheckout: true,
+				isAuthenticated: req.session.isLoggedIn,
+				pageTitle: 'Checkout page',
 			});
 		} catch (e) {
 			console.log('Checkout: ', e);
@@ -90,9 +96,10 @@ module.exports = {
 			const fetchedOrders = await Order.find({ userId: req.user._id });
 			const orders = deepClone(fetchedOrders);
 			return res.render('shop/orders', {
-				pageTitle: 'Orders page',
 				activeOrders: true,
+				isAuthenticated: req.session.isLoggedIn,
 				orders,
+				pageTitle: 'Orders page',
 			});
 		} catch (e) {
 			console.log('Get Orders error: ', e);

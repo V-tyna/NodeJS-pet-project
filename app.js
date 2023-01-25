@@ -2,14 +2,21 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const mongoose = require('mongoose');
 const path = require('path');
-const { MONGO_URL_MONGOOSE } = require('./configs/keys.dev');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
+const { MONGO_URL_MONGOOSE } = require('./configs/keys.dev');
 const { getPageNotFound } = require('./controllers/error');
 const User = require('./models/mongoose/user');
 const adminRouter = require('./routes/admin');
+const authRouter = require('./routes/auth');
 const shopRouter = require('./routes/shop');
 
 const app = express();
+const store = new MongoDBStore({
+	uri:  MONGO_URL_MONGOOSE,
+	collection: 'sessions'
+});
 
 app.engine(
 	'hbs',
@@ -26,6 +33,13 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+	secret: 'It is a secret value',
+	resave: false,
+	saveUninitialized: false,
+	store
+}));
+
 app.use(async (req, res, next) => {
 	try {
 		const user = await User.findById('63d003d6e348acd4df5df96e');
@@ -38,6 +52,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/admin', adminRouter);
+app.use(authRouter);
 app.use(shopRouter);
 
 app.use(getPageNotFound);
