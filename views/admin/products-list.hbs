@@ -24,6 +24,7 @@
 						<form action='/admin/delete-product' method='POST'>
 							<input type="hidden" name="productId" value={{this._id}}>
 							<input type="hidden" name="price" value={{this.price}}>
+							<input type="hidden" name="csrfToken" value={{@root.csrf}}>
 							<button class='btn' type="submit">Delete</button>
 						</form>
 					</div>

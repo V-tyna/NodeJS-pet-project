@@ -1,3 +1,15 @@
+const cookieParser = require('cookie-parser');
+const { doubleCsrf } = require("csrf-csrf");
+const { doubleCsrfProtection } = doubleCsrf({
+	getSecret: () => 'Secret for csrf-csrf',
+	cookieName: 'csrf',
+	getTokenFromRequest: req => {
+    if (req.body.csrfToken) { 
+      return req.body.csrfToken;
+    }
+    return req['x-csrf-token'];
+}
+});
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const mongoose = require('mongoose');
@@ -13,6 +25,7 @@ const authRouter = require('./routes/auth');
 const shopRouter = require('./routes/shop');
 
 const app = express();
+app.use(cookieParser());
 const store = new MongoDBStore({
 	uri:  MONGO_URL_MONGOOSE,
 	collection: 'sessions'
@@ -52,6 +65,8 @@ app.use(async (req, res, next) => {
 	}
 });
 
+// app.use(globalVariables);
+app.use(doubleCsrfProtection);
 app.use('/admin', adminRouter);
 app.use(authRouter);
 app.use(shopRouter);
@@ -63,15 +78,6 @@ const start = async () => {
 		mongoose.set('strictQuery', true);
 		await mongoose.connect(MONGO_URL_MONGOOSE);
 		console.log('Mongoose successfully connected.');
-		const candidate = User.findById('63d003d6e348acd4df5df96e');
-		if (!candidate) {
-			const user = new User({
-				name: 'Valya',
-				email: 'v-tyna@gmail.com',
-				cart: { items: [] }
-			});
-			user.save();
-		}
 		app.listen(3000, () => {
 			console.log('Server is running on port: 3000.');
 		});

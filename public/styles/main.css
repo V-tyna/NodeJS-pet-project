@@ -241,3 +241,7 @@ button:active {
 .details__container h3 {
   text-align: center;
 }
+
+.auth-area {
+  display: flex;
+}

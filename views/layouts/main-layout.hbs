@@ -45,9 +45,10 @@
 					</li>
 					{{/if}}
 				</ul>
-				<div>
+				<div class="auth-area">
 				{{#isUndefined isAuthenticated}}
 						<li class='li__auth'><a href="/login">Login</a></li>
+						<li class='li__auth'><a href="/signup">Sign up</a></li>
 						{{else}}
 						<li class='li__auth'><a href="/logout">Logout</a></li>	
 				{{/isUndefined}}

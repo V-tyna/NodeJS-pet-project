@@ -17,6 +17,7 @@
 			<textarea name='description' id='description' rows="5">{{#if editing}}{{product.description}}{{/if}}</textarea>
 		</div>
     {{#if editing}}<input type="hidden" name="productId" value={{product._id}}>{{/if}}
+		<input type="hidden" name="csrfToken" value={{@root.csrf}}>
 		<button type='submit'>{{#if editing}}Update Product{{else}}Add Product{{/if}}</button>
 	</form>
 </main>

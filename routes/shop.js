@@ -1,4 +1,6 @@
 const { Router } = require('express');
+
+const isAuth = require('../middleware/isAuth');
 const {
 	getProducts,
 	getIndex,
@@ -15,17 +17,17 @@ const shopRouter = Router();
 
 shopRouter.get('/', getIndex);
 
-shopRouter.get('/cart', getCart);
+shopRouter.get('/cart', isAuth, getCart);
 
-shopRouter.post('/cart', postCart);
+shopRouter.post('/cart', isAuth,  postCart);
 
-shopRouter.post('/cart/delete', postDeleteProductFromCart);
+shopRouter.post('/cart/delete', isAuth,  postDeleteProductFromCart);
 
 shopRouter.get('/checkout', getCheckout);
 
-shopRouter.get('/orders', getOrders);
+shopRouter.get('/orders', isAuth,  getOrders);
 
-shopRouter.post('/create-order', postOrder);
+shopRouter.post('/create-order', isAuth,  postOrder);
 
 shopRouter.get('/products', getProducts);
 

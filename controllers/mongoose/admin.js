@@ -1,9 +1,20 @@
 const Product = require('../../models/mongoose/product');
-
+const { doubleCsrf } = require("csrf-csrf");
+const { generateToken } = doubleCsrf({
+	getSecret: () => 'Secret for csrf-csrf',
+		cookieName: 'csrf',
+	getTokenFromRequest: req => {
+    if (req.body.csrfToken) { 
+      return req.body.csrfToken;
+    }
+    return req['csrf'];
+}
+});
 const deepClone = require('../../utils/deepClone');
 
 module.exports = {
 	getAddProduct: (req, res, next) => {
+		res.locals.csrf = generateToken(res);
 		return res.render('admin/edit-product', {
 			activeAddProd: true,
 			isAuthenticated: req.session.isLoggedIn,
@@ -12,6 +23,7 @@ module.exports = {
 		});
 	},
 	getEditProduct: async (req, res, next) => {
+		res.locals.csrf = generateToken(res);
 		const editMode = req.query.edit;
 		const productId = req.params.productId;
 		if (!editMode) {
@@ -58,6 +70,7 @@ module.exports = {
 	},
 	getProducts: async (req, res, next) => {
 		try {
+			res.locals.csrf = generateToken(res);
 			const products = await Product.find({ userId: req.user._id });
 			const prods = deepClone(products);
 			return res.render('admin/products-list', {
@@ -74,6 +87,7 @@ module.exports = {
 		try {
 			const { title, imageUrl, price, description } = req.body;
 			const { _id: userId } = req.user;
+		
 			const product = new Product({
 				description,
 				imageUrl,
