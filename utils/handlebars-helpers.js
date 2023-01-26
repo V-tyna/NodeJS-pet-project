@@ -6,6 +6,13 @@ module.exports = {
     prices.push(result);
     return '' + result.toFixed(2);
   },
+  isUndefined(a, options) {
+    if (a === undefined) {
+      return options.fn(this);
+    } else {
+      return options.inverse(this);
+    }
+  },
   getDateAndTime(str) {
     const date = new Date(str).toLocaleDateString();
     const hours = new Date(str).getHours();

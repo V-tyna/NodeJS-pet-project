@@ -42,9 +42,10 @@ app.use(session({
 
 app.use(async (req, res, next) => {
 	try {
-		const user = await User.findById('63d003d6e348acd4df5df96e');
-		req.user = user;
-		// console.log('USER: ', req.user);
+		if (req.session.user) {
+			const user = await User.findById(req.session.user._id);
+			req.user = user;
+		}
 		next();
 	} catch(e) {
 		console.log('Storing user in req error: ', e);

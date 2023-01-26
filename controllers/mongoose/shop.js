@@ -1,6 +1,5 @@
 const Order = require('../../models/mongoose/order');
 const Product = require('../../models/mongoose/product');
-const User = require('../../models/mongoose/user');
 
 const deepClone = require('../../utils/deepClone');
 
@@ -37,7 +36,6 @@ module.exports = {
 		try {
 			const products = await Product.find();
 			const prods = deepClone(products);
-			console.log('AUTH: ', req.session.isLoggedIn);
 			return res.render('shop/index', {
 				activeShop: true,
 				isAuthenticated: req.session.isLoggedIn,

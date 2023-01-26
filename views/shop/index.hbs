@@ -18,7 +18,9 @@
 						</p>
 					</div>
 					<div class='card__actions'>
-						 {{> add-to-cart}}
+					{{#if ../isAuthenticated}}
+						{{> add-to-cart}}
+					{{/if}}
 					</div>
 				</article>
 			{{/each}}

@@ -30,13 +30,13 @@
 					<li class='main-header__item'>
 						<a class='{{#if activeProducts}}active{{/if}}' href='/products'>Products</a>
 					</li>
+					{{#if isAuthenticated}}
 					<li class='main-header__item'>
 						<a class='{{#if activeCart}}active{{/if}}' href='/cart'>Cart</a>
 					</li>
 					<li class='main-header__item'>
 						<a class='{{#if activeOrders}}active{{/if}}' href='/orders'>Orders</a>
 					</li>
-					{{#if isAuthenticated}}
 					<li class='main-header__item'>
 						<a class='{{#if activeAddProd}}active{{/if}}' href='/admin/add-product'>Add Product</a>
 					</li>
@@ -45,11 +45,13 @@
 					</li>
 					{{/if}}
 				</ul>
-				{{!-- {{#if !isAuthenticated}} --}}
 				<div>
+				{{#isUndefined isAuthenticated}}
 						<li class='li__auth'><a href="/login">Login</a></li>
+						{{else}}
+						<li class='li__auth'><a href="/logout">Logout</a></li>	
+				{{/isUndefined}}
 				</div>
-				{{!-- {{/if}} --}}
 			</nav>
 		</header>
     {{{ body }}}

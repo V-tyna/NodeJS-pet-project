@@ -9,10 +9,12 @@
 		<h3>{{product.price}}$</h3>
 		<p>{{product.description}}</p>
 		<div class='card__actions'>
+			{{#if isAuthenticated}}
 			<form action='/cart' method='POST'>
 				<button class='btn' type='submit'>Add to cart</button>
         <input type="hidden" name="productId" value="{{product._id}}">
 			</form>
+			{{/if}}
 		</div>
 	</div>
 </div>
