@@ -20,7 +20,9 @@ const userSchema = new Schema({
 	password: {
 		type: String,
 		required: true
-	}
+	},
+	resetToken: String,
+	resetTokenExp: Date
 });
 
 userSchema.methods.addToCart = function(product) {

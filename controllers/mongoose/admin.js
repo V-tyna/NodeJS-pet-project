@@ -54,7 +54,7 @@ module.exports = {
 		try {
 			const { title, imageUrl, price, description } = req.body;
 			const { _id: userId } = req.user;
-		
+
 			const product = new Product({
 				description,
 				imageUrl,
@@ -71,7 +71,10 @@ module.exports = {
 	postDeleteProduct: async (req, res, next) => {
 		try {
 			const { productId } = req.body;
-			await Product.findByIdAndDelete(productId);
+			await Product.findOneAndDelete({
+				_id: productId,
+				userId: req.user._id,
+			});
 			await req.user.deleteProductFromTheCart(productId);
 			return res.redirect('/admin/products-list');
 		} catch (e) {
@@ -81,12 +84,15 @@ module.exports = {
 	postEditProduct: async (req, res, next) => {
 		try {
 			const { title, imageUrl, price, description, productId } = req.body;
-			await Product.findByIdAndUpdate(productId, {
-				description,
-				imageUrl,
-				price,
-				title,
-			});
+			await Product.findOneAndUpdate(
+				{ _id: productId, userId: req.user._id },
+				{
+					description,
+					imageUrl,
+					price,
+					title,
+				}
+			);
 			return res.redirect('/admin/products-list');
 		} catch (e) {
 			console.log('Update product error: ', e);

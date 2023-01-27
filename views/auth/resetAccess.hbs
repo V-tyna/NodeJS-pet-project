@@ -1,0 +1,24 @@
+<main>
+	<form class='form-container' action='/reset/{{token}}' method='POST'>
+
+		<div class='form-control'>
+			<label for='password'>Password:</label>
+			<input type='password' name='password' id='password' />
+		</div>
+    <div class='form-control'>
+			<label for='repeated_password'>Repeat password:</label>
+			<input type='password' name='repeated_password' id='repeated_password' />
+		</div>
+    <div class="btn-area">
+      <input type="hidden" name="userId" value={{userId}}>
+      <input type="hidden" name="token" value={{token}}>
+			<input type="hidden" name="csrfToken" value={{@root.csrf}}>
+		  <button type='submit'>Confirm</button>
+    </div>
+	</form>
+	<div class="error__container">
+		{{#if errorMessage}}
+			<h3>{{errorMessage}}</h3>
+		{{/if}}
+	</div>
+</main>

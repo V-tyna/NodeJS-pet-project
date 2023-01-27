@@ -2,20 +2,25 @@
 	<form class='form-container' action='/login' method='POST'>
 		<div class='form-control'>
 			<label for='email'>Email</label>
-			<input type='text' name='email' id='email'/>
+			<input type='text' name='email' id='email' />
 		</div>
 		<div class='form-control'>
 			<label for='password'>Password:</label>
 			<input type='password' name='password' id='password' />
 		</div>
-    <div class="btn-area">
-			<input type="hidden" name="csrfToken" value={{@root.csrf}}>
-		  <button type='submit'>Login</button>
-    </div>
+		<div class='btn-area'>
+			<input type='hidden' name='csrfToken' value={{@root.csrf}} />
+			<button type='submit'>Login</button>
+		</div>
 	</form>
-	<div class="error__container">
+	<div class='error__container'>
 		{{#if errorMessage}}
 			<h3>{{errorMessage}}</h3>
 		{{/if}}
+	</div>
+	<div  class='link-area'>
+		<a href='/reset'>
+			<button type='submit'> Forget password? </button>
+		</a>
 	</div>
 </main>

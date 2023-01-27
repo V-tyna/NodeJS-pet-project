@@ -1,0 +1,18 @@
+<main>
+	<form class='form-container' action='/reset' method='POST'>
+    <h3>Please, enter your email to get letter with the link to reset your password: </h3>
+		<div class='form-control'>
+			<label for='email'>Email:</label>
+			<input type='text' name='email' id='email'/>
+		</div>
+    <div class="btn-area">
+			<input type="hidden" name="csrfToken" value={{@root.csrf}}>
+		  <button type='submit'>Confirm</button>
+    </div>
+	</form>
+	<div class="error__container">
+		{{#if errorMessage}}
+			<h3>{{errorMessage}}</h3>
+		{{/if}}
+	</div>
+</main>
