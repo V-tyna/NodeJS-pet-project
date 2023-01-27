@@ -14,7 +14,7 @@
 					<div class='card__content'>
 						<h2 class='product__price'>{{this.price}}$</h2>
 						<p class='product__description'>
-							{{this.description}}
+							{{#reduceDescription this.description}}{{/reduceDescription}}
 						</p>
 					</div>
 					<div class='card__actions'>

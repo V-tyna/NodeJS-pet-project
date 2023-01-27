@@ -25,7 +25,6 @@ module.exports = {
 			console.log('Sign up render error: ', e);
 		}
 	},
-
 	postLoginPage: async (req, res, next) => {
 		try {
 			const { email, password } = req.body;

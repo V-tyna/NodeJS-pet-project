@@ -1,53 +1,13 @@
+const { createToken } = require('../../utils/createToken');
+
+const deepClone = require('../../utils/deepClone');
 const Order = require('../../models/mongoose/order');
 const Product = require('../../models/mongoose/product');
 
-const deepClone = require('../../utils/deepClone');
-
 module.exports = {
-	getProducts: async (req, res, next) => {
-		try {
-			const products = await Product.find();
-			const prods = deepClone(products);
-			res.render('shop/products-list', {
-				activeProducts: true,
-				isAuthenticated: req.session.isLoggedIn,
-				pageTitle: 'Products list page',
-				prods,
-			});
-		} catch (e) {
-			console.log('Get products in shop page error: ', e);
-		}
-	},
-	getProductById: async (req, res, next) => {
-		try {
-			const { productId } = req.params;
-			const prod = await Product.findById(productId);
-			const product = deepClone(prod);
-			res.render('shop/product-details', {
-				isAuthenticated: req.session.isLoggedIn,
-				pageTitle: 'Product details page',
-				product,
-			});
-		} catch (e) {
-			console.log('Get product by id in detail page error: ', e);
-		}
-	},
-	getIndex: async (req, res, next) => {
-		try {
-			const products = await Product.find();
-			const prods = deepClone(products);
-			return res.render('shop/index', {
-				activeShop: true,
-				isAuthenticated: req.session.isLoggedIn,
-				prods,
-				pageTitle: 'Home page',
-			});
-		} catch (e) {
-			console.log('Get products in index/home page error: ', e);
-		}
-	},
 	getCart: async (req, res, next) => {
 		try {
+			createToken(res);
 			const user = await req.user.populate(['cart.items.productId']);
 			const cartProducts = user.cart.items.map((el) => ({
 				_id: el.productId._id,
@@ -68,16 +28,6 @@ module.exports = {
 			console.log('Get cart error: ', e);
 		}
 	},
-	postCart: async (req, res, next) => {
-		try {
-			const { productId } = req.body;
-			const product = await Product.findById(productId);
-			await req.user.addToCart(product);
-			return res.redirect('/cart');
-		} catch (e) {
-			console.log('Post cart error: ', e);
-		}
-	},
 	getCheckout: (req, res, next) => {
 		try {
 			return res.render('shop/checkout', {
@@ -89,8 +39,24 @@ module.exports = {
 			console.log('Checkout: ', e);
 		}
 	},
+	getIndex: async (req, res, next) => {
+		try {
+			createToken(res);
+			const products = await Product.find();
+			const prods = deepClone(products);
+			return res.render('shop/index', {
+				activeShop: true,
+				isAuthenticated: req.session.isLoggedIn,
+				prods,
+				pageTitle: 'Home page',
+			});
+		} catch (e) {
+			console.log('Get products in index/home page error: ', e);
+		}
+	},
 	getOrders: async (req, res, next) => {
 		try {
+			createToken(res);
 			const fetchedOrders = await Order.find({ userId: req.user._id });
 			const orders = deepClone(fetchedOrders);
 			return res.render('shop/orders', {
@@ -101,6 +67,55 @@ module.exports = {
 			});
 		} catch (e) {
 			console.log('Get Orders error: ', e);
+		}
+	},
+	getProducts: async (req, res, next) => {
+		try {
+			createToken(res);
+			const products = await Product.find();
+			const prods = deepClone(products);
+			res.render('shop/products-list', {
+				activeProducts: true,
+				isAuthenticated: req.session.isLoggedIn,
+				pageTitle: 'Products list page',
+				prods,
+			});
+		} catch (e) {
+			console.log('Get products in shop page error: ', e);
+		}
+	},
+	getProductById: async (req, res, next) => {
+		try {
+			createToken(res);
+			const { productId } = req.params;
+			const prod = await Product.findById(productId);
+			const product = deepClone(prod);
+			res.render('shop/product-details', {
+				isAuthenticated: req.session.isLoggedIn,
+				pageTitle: 'Product details page',
+				product,
+			});
+		} catch (e) {
+			console.log('Get product by id in detail page error: ', e);
+		}
+	},
+	postCart: async (req, res, next) => {
+		try {
+			const { productId } = req.body;
+			const product = await Product.findById(productId);
+			await req.user.addToCart(product);
+			return res.redirect('/cart');
+		} catch (e) {
+			console.log('Post cart error: ', e);
+		}
+	},
+	postDeleteProductFromCart: async (req, res, next) => {
+		try {
+			const { productId } = req.body;
+			await req.user.deleteProductFromTheCart(productId);
+			return res.redirect('/cart');
+		} catch (e) {
+			console.log('Deleting product from Cart error: ', e);
 		}
 	},
 	postOrder: async (req, res, next) => {
@@ -130,15 +145,6 @@ module.exports = {
 			return res.redirect('/orders');
 		} catch (e) {
 			console.log('Making post order error: ', e);
-		}
-	},
-	postDeleteProductFromCart: async (req, res, next) => {
-		try {
-			const { productId } = req.body;
-			await req.user.deleteProductFromTheCart(productId);
-			return res.redirect('/cart');
-		} catch (e) {
-			console.log('Deleting product from Cart error: ', e);
 		}
 	},
 };

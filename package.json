@@ -11,6 +11,8 @@
   "author": "Valentyna Boiko",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.32.0",
+    "eslint-plugin-sort-requires": "^2.1.0",
     "nodemon": "^2.0.20"
   },
   "dependencies": {

@@ -14,11 +14,11 @@ const adminRouter = Router();
 
 adminRouter.get('/add-product', isAuth, getAddProduct);
 
+adminRouter.get('/edit-product/:productId', isAuth, getEditProduct);
+
 adminRouter.get('/products-list', isAuth, getProducts);
 
 adminRouter.post('/add-product', isAuth, postAddProduct);
-
-adminRouter.get('/edit-product/:productId', isAuth, getEditProduct);
 
 adminRouter.post('/edit-product', isAuth, postEditProduct);
 

@@ -1,31 +1,28 @@
-const cookieParser = require('cookie-parser');
 const { doubleCsrf } = require("csrf-csrf");
-const { doubleCsrfProtection } = doubleCsrf({
-	getSecret: () => 'Secret for csrf-csrf',
-	cookieName: 'csrf',
-	getTokenFromRequest: req => {
-    if (req.body.csrfToken) { 
-      return req.body.csrfToken;
-    }
-    return req['x-csrf-token'];
-}
-});
+
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const mongoose = require('mongoose');
 const path = require('path');
 const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
 
-const { MONGO_URL_MONGOOSE } = require('./configs/keys.dev');
 const { getPageNotFound } = require('./controllers/error');
-const User = require('./models/mongoose/user');
+const { MONGO_URL_MONGOOSE, COOKIE_PARSER_SECRET } = require('./configs/keys.dev');
+const { options } = require('./configs/csrf-csrfOptions');
+
 const adminRouter = require('./routes/admin');
 const authRouter = require('./routes/auth');
 const shopRouter = require('./routes/shop');
+const User = require('./models/mongoose/user');
 
 const app = express();
-app.use(cookieParser());
+
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+const { doubleCsrfProtection } = doubleCsrf(options);
+
+app.use(cookieParser(COOKIE_PARSER_SECRET));
 const store = new MongoDBStore({
 	uri:  MONGO_URL_MONGOOSE,
 	collection: 'sessions'
@@ -65,7 +62,6 @@ app.use(async (req, res, next) => {
 	}
 });
 
-// app.use(globalVariables);
 app.use(doubleCsrfProtection);
 app.use('/admin', adminRouter);
 app.use(authRouter);

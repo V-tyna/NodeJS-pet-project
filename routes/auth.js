@@ -1,6 +1,11 @@
+const {
+	getLoginPage,
+	postLoginPage,
+	postLogout,
+	getSignupPage,
+	postSignup,
+} = require('../controllers/mongoose/auth');
 const { Router } = require('express');
-const { getLoginPage, postLoginPage, postLogout, getSignupPage, postSignup } = require('../controllers/mongoose/auth');
-
 const authRouter = Router();
 
 authRouter.get('/login', getLoginPage);

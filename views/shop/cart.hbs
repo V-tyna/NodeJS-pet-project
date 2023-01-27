@@ -19,6 +19,7 @@
       <form action="/cart/delete" method="POST" class="cart__delete_form">
         <input type="hidden" name="price" value="{{this.price}}">
         <input type="hidden" name="productId" value="{{this._id}}">
+        <input type="hidden" name="csrfToken" value={{@root.csrf}}>
         <button class="btn__delete" type="submit"><i class="material-icons">delete</i></button>
       </form>
       </th>
@@ -33,6 +34,7 @@
   <label for="address">Delivery Address: </label>
   <input id="address" name="address" minlength="10"/>
   <div class="create__order__button__area">
+    <input type="hidden" name="csrfToken" value={{@root.csrf}}>
     <button class="btn" type="submit"> Make an order</button> 
   </div>
 </form>

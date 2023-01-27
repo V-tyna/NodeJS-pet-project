@@ -1,20 +1,11 @@
-const Product = require('../../models/mongoose/product');
-const { doubleCsrf } = require("csrf-csrf");
-const { generateToken } = doubleCsrf({
-	getSecret: () => 'Secret for csrf-csrf',
-		cookieName: 'csrf',
-	getTokenFromRequest: req => {
-    if (req.body.csrfToken) { 
-      return req.body.csrfToken;
-    }
-    return req['csrf'];
-}
-});
+const { createToken } = require('../../utils/createToken');
+
 const deepClone = require('../../utils/deepClone');
+const Product = require('../../models/mongoose/product');
 
 module.exports = {
 	getAddProduct: (req, res, next) => {
-		res.locals.csrf = generateToken(res);
+		createToken(res);
 		return res.render('admin/edit-product', {
 			activeAddProd: true,
 			isAuthenticated: req.session.isLoggedIn,
@@ -23,7 +14,7 @@ module.exports = {
 		});
 	},
 	getEditProduct: async (req, res, next) => {
-		res.locals.csrf = generateToken(res);
+		createToken(res);
 		const editMode = req.query.edit;
 		const productId = req.params.productId;
 		if (!editMode) {
@@ -44,33 +35,9 @@ module.exports = {
 			return res.redirect('/');
 		}
 	},
-	postEditProduct: async (req, res, next) => {
-		try {
-			const { title, imageUrl, price, description, productId } = req.body;
-			await Product.findByIdAndUpdate(productId, {
-				description,
-				imageUrl,
-				price,
-				title,
-			});
-			return res.redirect('/admin/products-list');
-		} catch (e) {
-			console.log('Update product error: ', e);
-		}
-	},
-	postDeleteProduct: async (req, res, next) => {
-		try {
-			const { productId } = req.body;
-			await Product.findByIdAndDelete(productId);
-			await req.user.deleteProductFromTheCart(productId);
-			return res.redirect('/admin/products-list');
-		} catch (e) {
-			console.log('Deleting product error: ', e);
-		}
-	},
 	getProducts: async (req, res, next) => {
 		try {
-			res.locals.csrf = generateToken(res);
+			createToken(res);
 			const products = await Product.find({ userId: req.user._id });
 			const prods = deepClone(products);
 			return res.render('admin/products-list', {
@@ -99,6 +66,30 @@ module.exports = {
 			return res.redirect('/admin/products-list');
 		} catch (e) {
 			console.log('Add product error:', e);
+		}
+	},
+	postDeleteProduct: async (req, res, next) => {
+		try {
+			const { productId } = req.body;
+			await Product.findByIdAndDelete(productId);
+			await req.user.deleteProductFromTheCart(productId);
+			return res.redirect('/admin/products-list');
+		} catch (e) {
+			console.log('Deleting product error: ', e);
+		}
+	},
+	postEditProduct: async (req, res, next) => {
+		try {
+			const { title, imageUrl, price, description, productId } = req.body;
+			await Product.findByIdAndUpdate(productId, {
+				description,
+				imageUrl,
+				price,
+				title,
+			});
+			return res.redirect('/admin/products-list');
+		} catch (e) {
+			console.log('Update product error: ', e);
 		}
 	},
 };

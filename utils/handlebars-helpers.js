@@ -1,6 +1,17 @@
 let prices = [];
 
 module.exports = {
+  getDateAndTime(str) {
+    const date = new Date(str).toLocaleDateString();
+    const hours = new Date(str).getHours();
+    const minutes = new Date(str).getHours();
+    return `${date}, ${hours}:${minutes}`;
+  },
+  getTotalPrice() {
+    const totalPrice = prices.reduce((a, b) => a += b).toFixed(2);
+    prices = [];
+    return totalPrice;
+  },
   countPrice(a, b, options) {
     const result = (+a * +b);
     prices.push(result);
@@ -13,15 +24,7 @@ module.exports = {
       return options.inverse(this);
     }
   },
-  getDateAndTime(str) {
-    const date = new Date(str).toLocaleDateString();
-    const hours = new Date(str).getHours();
-    const minutes = new Date(str).getHours();
-    return `${date}, ${hours}:${minutes}`;
-  },
-  getTotalPrice() {
-    const totalPrice = prices.reduce((a, b) => a += b).toFixed(2);
-    prices = [];
-    return totalPrice;
+  reduceDescription(a, options) {
+    return a.slice(0, 100) + '...';
   }
 }
