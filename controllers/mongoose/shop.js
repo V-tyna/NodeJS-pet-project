@@ -20,6 +20,7 @@ module.exports = {
 			const products = deepClone(cartProducts);
 			return res.render('shop/cart', {
 				activeCart: true,
+				errorMessage: req.flash('error'),
 				isAuthenticated: req.session.isLoggedIn,
 				pageTitle: 'Cart page',
 				products,
@@ -121,6 +122,10 @@ module.exports = {
 	postOrder: async (req, res, next) => {
 		try {
 			const { address } = req.body;
+			if (!address) {
+				req.flash('error', 'Address field should not be empty.');
+				return res.redirect('/cart');
+			}
 			const user = await req.user.populate(['cart.items.productId']);
 			const cartProducts = user.cart.items.map((el) => ({
 				description: el.productId.description,

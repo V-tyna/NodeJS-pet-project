@@ -37,6 +37,11 @@
     <input type="hidden" name="csrfToken" value={{@root.csrf}}>
     <button class="btn" type="submit"> Make an order</button> 
   </div>
+  <div class="error__container">
+		{{#if errorMessage}}
+			<h3>{{errorMessage}}</h3>
+		{{/if}}
+	</div>
 </form>
 {{else}}
 <h1>No products in the cart yet...</h1>

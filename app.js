@@ -3,6 +3,7 @@ const { doubleCsrf } = require("csrf-csrf");
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
+const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const path = require('path');
 const session = require('express-session');
@@ -63,11 +64,12 @@ app.use(async (req, res, next) => {
 });
 
 app.use(doubleCsrfProtection);
+app.use(flash());
 app.use('/admin', adminRouter);
 app.use(authRouter);
 app.use(shopRouter);
-
 app.use(getPageNotFound);
+
 
 const start = async () => {
 	try {

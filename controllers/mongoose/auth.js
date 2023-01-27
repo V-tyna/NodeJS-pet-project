@@ -1,11 +1,15 @@
 const bcrypt = require('bcryptjs');
 
+const { createToken } = require('../../utils/createToken');
+
 const User = require('../../models/mongoose/user');
 
 module.exports = {
 	getLoginPage: (req, res, next) => {
 		try {
+			createToken(res);
 			return res.render('admin/login', {
+				errorMessage: req.flash('error'),
 				isAuthenticated: req.session.isLoggedIn,
 				formCSS: true,
 				pageTitle: 'Login Page',
@@ -16,7 +20,10 @@ module.exports = {
 	},
 	getSignupPage: (req, res, next) => {
 		try {
+			createToken(res);
 			return res.render('admin/signup', {
+				errorUserExists: req.flash('errorUserExists'),
+				errorPassword: req.flash('errorPassword'),
 				isAuthenticated: req.session.isLoggedIn,
 				formCSS: true,
 				pageTitle: 'Signup Page',
@@ -38,6 +45,7 @@ module.exports = {
 					return res.redirect('/');
 				}
 			} else {
+				req.flash('error', 'Invalid email or password.');
 				return res.redirect('/login');
 			}
 		} catch (e) {
@@ -55,10 +63,10 @@ module.exports = {
 	postSignup: async (req, res, next) => {
 		try {
 			const { email, userName, password, repeated_password } = req.body;
-			console.log('USER DATA: ', email, userName, password);
 			if (password === repeated_password) {
 				const candidate = await User.findOne({ email: email });
 				if (candidate) {
+					req.flash('errorUserExists', `User with this email ${email} already exists.`);
 					return res.redirect('/signup');
 				} else {
 					const hashPassword = await bcrypt.hash(password, 12);
@@ -71,6 +79,9 @@ module.exports = {
 					await user.save();
 					return res.redirect('/login');
 				}
+			} else {
+				req.flash('errorPassword', 'Passwords do not match.');
+				return res.redirect('/signup');
 			}
 		} catch (e) {
 			console.log('Sign up post error: ', e);

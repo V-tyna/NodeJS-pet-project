@@ -17,7 +17,16 @@
 			<input type='password' name='repeated_password' id='repeated_password' />
 		</div>
     <div class="btn-area">
+			<input type="hidden" name="csrfToken" value={{@root.csrf}}>
 		  <button type='submit'>Sign up</button>
     </div>
 	</form>
+	<div class="error__container">
+		{{#if errorPassword}}
+			<h3>{{errorPassword}}</h3>
+		{{/if}}
+		{{#if errorUserExists}}
+			<h3>{{errorUserExists}}</h3>
+		{{/if}}
+	</div>
 </main>
