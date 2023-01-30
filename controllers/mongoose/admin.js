@@ -2,22 +2,26 @@ const { createToken } = require('../../utils/createToken');
 const { validationResult } = require('express-validator');
 
 const deepClone = require('../../utils/deepClone');
+const getError = require('../../utils/getError');
 const Product = require('../../models/mongoose/product');
-const product = require('../../models/mongoose/product');
 
 module.exports = {
 	getAddProduct: (req, res, next) => {
-		const data = req.flash('userData');
-		createToken(res);
-		return res.render('admin/edit-product', {
-			activeAddProd: true,
-			errorValidation: req.flash('errorValidation'),
-			isAuthenticated: req.session.isLoggedIn,
-			pageTitle: 'Add product page',
-			product: data[0],
-			productCSS: true,
-			validationErrors: req.flash('validationErrors'),
-		});
+		try {
+			const data = req.flash('userData');
+			createToken(res);
+			return res.render('admin/edit-product', {
+				activeAddProd: true,
+				errorValidation: req.flash('errorValidation'),
+				isAuthenticated: req.session.isLoggedIn,
+				pageTitle: 'Add product page',
+				product: data[0],
+				productCSS: true,
+				validationErrors: req.flash('validationErrors'),
+			});
+		} catch (e) {
+			getError('Rendering Add product page error', e);
+		}
 	},
 	getEditProduct: async (req, res, next) => {
 		createToken(res);
@@ -45,8 +49,7 @@ module.exports = {
 				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
-			console.log('Product not found.');
-			return res.redirect('/');
+			getError('Product page error. Possibly that product not found.', e);
 		}
 	},
 	getProducts: async (req, res, next) => {
@@ -60,8 +63,8 @@ module.exports = {
 				pageTitle: 'Admin products-list page',
 				prods,
 			});
-		} catch {
-			console.log('Get products in Admin page error: ', e);
+		} catch (e) {
+			getError('Get products in Admin page error: ', e);
 		}
 	},
 	postAddProduct: async (req, res, next) => {
@@ -78,6 +81,7 @@ module.exports = {
 				return res.status(422).redirect('/admin/add-product');
 			}
 			const product = new Product({
+				_id: Types.ObjectId('63d00687e2b0c213454968d9'),
 				description,
 				imageUrl,
 				price,
@@ -85,9 +89,9 @@ module.exports = {
 				userId,
 			});
 			await product.save();
-			return res.redirect('/admin/products-list');
+			return res.status(201).redirect('/admin/products-list');
 		} catch (e) {
-			console.log('Add product error:', e);
+			getError('Add product POST error: ', e);
 		}
 	},
 	postDeleteProduct: async (req, res, next) => {
@@ -100,7 +104,8 @@ module.exports = {
 			await req.user.deleteProductFromTheCart(productId);
 			return res.redirect('/admin/products-list');
 		} catch (e) {
-			console.log('Deleting product error: ', e);
+			console.log();
+			getError('Deleting product error: ', e);
 		}
 	},
 	postEditProduct: async (req, res, next) => {
@@ -113,7 +118,9 @@ module.exports = {
 				req.flash('validationErrors', errors.array());
 				req.flash('userData', { title, imageUrl, price, description });
 				req.flash('errorValidation', errors.array()[0].msg);
-				return res.status(422).redirect(`/admin/edit-product/${productId}?edit=true`);
+				return res
+					.status(422)
+					.redirect(`/admin/edit-product/${productId}?edit=true`);
 			}
 			await Product.findOneAndUpdate(
 				{ _id: productId, userId: req.user._id },
@@ -126,7 +133,7 @@ module.exports = {
 			);
 			return res.redirect('/admin/products-list');
 		} catch (e) {
-			console.log('Update product error: ', e);
+			getError('Update product error: ', e);
 		}
 	},
 };

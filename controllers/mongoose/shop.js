@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator');
 const { createToken } = require('../../utils/createToken');
 
 const deepClone = require('../../utils/deepClone');
+const getError = require('../../utils/getError');
 const Order = require('../../models/mongoose/order');
 const Product = require('../../models/mongoose/product');
 
@@ -28,7 +29,7 @@ module.exports = {
 				products,
 			});
 		} catch (e) {
-			console.log('Get cart error: ', e);
+			getError('Get cart error: ', e);
 		}
 	},
 	getCheckout: (req, res, next) => {
@@ -39,7 +40,7 @@ module.exports = {
 				pageTitle: 'Checkout page',
 			});
 		} catch (e) {
-			console.log('Checkout: ', e);
+			getError('Checkout: ', e);
 		}
 	},
 	getIndex: async (req, res, next) => {
@@ -54,7 +55,7 @@ module.exports = {
 				pageTitle: 'Home page',
 			});
 		} catch (e) {
-			console.log('Get products in index/home page error: ', e);
+			getError('Get products in index/home page error: ', e);
 		}
 	},
 	getOrders: async (req, res, next) => {
@@ -69,7 +70,7 @@ module.exports = {
 				pageTitle: 'Orders page',
 			});
 		} catch (e) {
-			console.log('Get Orders error: ', e);
+			getError('Get Orders error: ', e);
 		}
 	},
 	getProducts: async (req, res, next) => {
@@ -84,7 +85,7 @@ module.exports = {
 				prods,
 			});
 		} catch (e) {
-			console.log('Get products in shop page error: ', e);
+			getError('Get products in shop page error: ', e);
 		}
 	},
 	getProductById: async (req, res, next) => {
@@ -99,7 +100,7 @@ module.exports = {
 				product,
 			});
 		} catch (e) {
-			console.log('Get product by id in detail page error: ', e);
+			getError('Get product by id in detail page error: ', e);
 		}
 	},
 	postCart: async (req, res, next) => {
@@ -109,7 +110,7 @@ module.exports = {
 			await req.user.addToCart(product);
 			return res.redirect('/cart');
 		} catch (e) {
-			console.log('Post cart error: ', e);
+			getError('Post cart error: ', e);
 		}
 	},
 	postDeleteProductFromCart: async (req, res, next) => {
@@ -118,7 +119,7 @@ module.exports = {
 			await req.user.deleteProductFromTheCart(productId);
 			return res.redirect('/cart');
 		} catch (e) {
-			console.log('Deleting product from Cart error: ', e);
+			getError('Deleting product from Cart error: ', e);
 		}
 	},
 	postOrder: async (req, res, next) => {
@@ -155,7 +156,7 @@ module.exports = {
 			await req.user.cleanCart();
 			return res.redirect('/orders');
 		} catch (e) {
-			console.log('Making post order error: ', e);
+			getError('Making post order error: ', e);
 		}
 	},
 };

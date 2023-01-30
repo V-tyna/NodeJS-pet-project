@@ -14,6 +14,7 @@ const { options } = require('./configs/csrf-csrfOptions');
 
 const adminRouter = require('./routes/admin');
 const authRouter = require('./routes/auth');
+const errorRouter = require('./routes/errors');
 const shopRouter = require('./routes/shop');
 const User = require('./models/mongoose/user');
 
@@ -68,8 +69,15 @@ app.use(flash());
 app.use('/admin', adminRouter);
 app.use(authRouter);
 app.use(shopRouter);
+app.use(errorRouter);
 app.use(getPageNotFound);
 
+app.use((error, req, res, next) => {
+	res.status(500).render('500', {
+		title: 'Error page 500',
+		isAuthenticated: req.session.isLoggedIn
+	});
+});
 
 const start = async () => {
 	try {

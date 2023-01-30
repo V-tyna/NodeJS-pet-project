@@ -8,13 +8,13 @@ const {
 } = require('../../utils/sendEmail');
 const { createToken } = require('../../utils/createToken');
 
+const getError = require('../../utils/getError');
 const User = require('../../models/mongoose/user');
 
 module.exports = {
 	getLoginPage: (req, res, next) => {
 		try {
 			const data = req.flash('userData');
-
 			createToken(res);
 			return res.render('auth/login', {
 				errorMessage: req.flash('errorValidation'),
@@ -25,7 +25,7 @@ module.exports = {
 				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
-			console.log('Login page rendering error: ', e);
+			getError('Login page rendering error: ', e);
 		}
 	},
 	getResetPage: (req, res, next) => {
@@ -38,7 +38,7 @@ module.exports = {
 				pageTitle: 'Reset password Page',
 			});
 		} catch (e) {
-			console.log('Reset password render error: ', e);
+			getError('Reset password render error: ', e);
 		}
 	},
 	getResetAccessPage: async (req, res, next) => {
@@ -63,7 +63,7 @@ module.exports = {
 				res.redirect('/reset');
 			}
 		} catch (e) {
-			console.log('Reset access page render error: ', e);
+			getError('Reset access page render error: ', e);
 		}
 	},
 	getSignupPage: (req, res, next) => {
@@ -79,7 +79,7 @@ module.exports = {
 				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
-			console.log('Sign up render error: ', e);
+			getError('Sign up render error: ', e);
 		}
 	},
 	postLoginPage: async (req, res, next) => {
@@ -97,7 +97,7 @@ module.exports = {
 
 			return res.redirect('/');
 		} catch (e) {
-			console.log('Login page rendering error: ', e);
+			getError('Login page rendering error: ', e);
 		}
 	},
 	postLogout: async (req, res, next) => {
@@ -106,54 +106,62 @@ module.exports = {
 			await req.session.destroy();
 			return res.redirect('/');
 		} catch (e) {
-			console.log('Logout error: ', e);
+			getError('Logout error: ', e);
 		}
 	},
 	postResetAccess: async (req, res, next) => {
-		const { password, repeated_password, token, userId } = req.body;
-		if (password === repeated_password) {
-			const user = await User.findOne({
-				resetToken: token,
-				resetTokenExp: { $gt: Date.now() },
-				_id: userId,
-			});
-			if (user) {
-				const hashPassword = await bcrypt.hash(password, 12);
-				user.password = hashPassword;
-				await user.save();
+		try {
+			const { password, repeated_password, token, userId } = req.body;
+			if (password === repeated_password) {
+				const user = await User.findOne({
+					resetToken: token,
+					resetTokenExp: { $gt: Date.now() },
+					_id: userId,
+				});
+				if (user) {
+					const hashPassword = await bcrypt.hash(password, 12);
+					user.password = hashPassword;
+					await user.save();
+				} else {
+					req.flash('error', 'User not found or token has been expired.');
+					return res.redirect('/reset');
+				}
+				return res.redirect('/login');
 			} else {
-				req.flash('error', 'User not found or token has been expired.');
-				return res.redirect('/reset');
+				req.flash('error', 'Passwords do not match');
+				return res.redirect(`/reset/${token}`);
 			}
-			return res.redirect('/login');
-		} else {
-			req.flash('error', 'Passwords do not match');
-			return res.redirect(`/reset/${token}`);
+		} catch (e) {
+			getError('POST reset access page error: ', e);
 		}
 	},
 	postResetPage: async (req, res, next) => {
-		const { email } = req.body;
-		const user = await User.findOne({ email: email });
-		if (!user) {
-			req.flash('error', `User with such email ${email} does not exist.`);
-			res.redirect('/reset');
-		} else {
-			crypto.randomBytes(32, async (err, buffer) => {
-				if (err) {
-					req.flash(
-						'error',
-						'Something went wrong, please try again later...'
-					);
-					return res.redirect('/reset');
-				} else {
-					const token = buffer.toString('hex');
-					user.resetToken = token;
-					user.resetTokenExp = Date.now() + 900000;
-					await user.save();
-					sendResetPasswordEmail(email, user.name, token);
-					return res.redirect('/');
-				}
-			});
+		try {
+			const { email } = req.body;
+			const user = await User.findOne({ email: email });
+			if (!user) {
+				req.flash('error', `User with such email ${email} does not exist.`);
+				res.redirect('/reset');
+			} else {
+				crypto.randomBytes(32, async (err, buffer) => {
+					if (err) {
+						req.flash(
+							'error',
+							'Something went wrong, please try again later...'
+						);
+						return res.redirect('/reset');
+					} else {
+						const token = buffer.toString('hex');
+						user.resetToken = token;
+						user.resetTokenExp = Date.now() + 900000;
+						await user.save();
+						sendResetPasswordEmail(email, user.name, token);
+						return res.redirect('/');
+					}
+				});
+			}
+		} catch (e) {
+			getError('POST reset page error: ', e);
 		}
 	},
 	postSignup: async (req, res, next) => {
@@ -181,7 +189,7 @@ module.exports = {
 
 			return res.redirect('/login');
 		} catch (e) {
-			console.log('Sign up post error: ', e);
+			getError('Sign up post error: ', e);
 		}
 	},
 };
