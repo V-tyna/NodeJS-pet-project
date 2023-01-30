@@ -1,16 +1,22 @@
 const { createToken } = require('../../utils/createToken');
+const { validationResult } = require('express-validator');
 
 const deepClone = require('../../utils/deepClone');
 const Product = require('../../models/mongoose/product');
+const product = require('../../models/mongoose/product');
 
 module.exports = {
 	getAddProduct: (req, res, next) => {
+		const data = req.flash('userData');
 		createToken(res);
 		return res.render('admin/edit-product', {
 			activeAddProd: true,
+			errorValidation: req.flash('errorValidation'),
 			isAuthenticated: req.session.isLoggedIn,
 			pageTitle: 'Add product page',
+			product: data[0],
 			productCSS: true,
+			validationErrors: req.flash('validationErrors'),
 		});
 	},
 	getEditProduct: async (req, res, next) => {
@@ -21,14 +27,22 @@ module.exports = {
 			return res.redirect('/');
 		}
 		try {
-			const prod = await Product.findById(productId);
-			const product = deepClone(prod);
+			const errorValidation = req.flash('errorValidation');
+			let product;
+			if (errorValidation.length) {
+				product = req.flash('userData')[0];
+			} else {
+				const prod = await Product.findById(productId);
+				product = deepClone(prod);
+			}
 			res.render('admin/edit-product', {
-				isAuthenticated: req.session.isLoggedIn,
 				editing: editMode,
+				errorValidation,
+				isAuthenticated: req.session.isLoggedIn,
 				pageTitle: 'Edit product page',
 				product,
 				productCSS: true,
+				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
 			console.log('Product not found.');
@@ -55,6 +69,14 @@ module.exports = {
 			const { title, imageUrl, price, description } = req.body;
 			const { _id: userId } = req.user;
 
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				req.flash('validationErrors', errors.array());
+				req.flash('userData', { title, imageUrl, price, description });
+				req.flash('errorValidation', errors.array()[0].msg);
+				return res.status(422).redirect('/admin/add-product');
+			}
 			const product = new Product({
 				description,
 				imageUrl,
@@ -84,6 +106,15 @@ module.exports = {
 	postEditProduct: async (req, res, next) => {
 		try {
 			const { title, imageUrl, price, description, productId } = req.body;
+
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				req.flash('validationErrors', errors.array());
+				req.flash('userData', { title, imageUrl, price, description });
+				req.flash('errorValidation', errors.array()[0].msg);
+				return res.status(422).redirect(`/admin/edit-product/${productId}?edit=true`);
+			}
 			await Product.findOneAndUpdate(
 				{ _id: productId, userId: req.user._id },
 				{

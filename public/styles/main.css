@@ -257,3 +257,7 @@ button:active {
 .error__container h3 {
   text-align: center;
 }
+
+.invalid {
+  background-color: #fa2c2c36;
+}

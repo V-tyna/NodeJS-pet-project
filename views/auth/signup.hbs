@@ -2,31 +2,57 @@
 	<form class='form-container' action='/signup' method='POST'>
 		<div class='form-control'>
 			<label for='email'>Email</label>
-			<input type='text' name='email' id='email'/>
+			<input 
+				{{#isError validationErrors 'email'}}
+					class="invalid"
+				{{/isError}}
+				type='email' 
+				name='email' 
+				id='email' 
+				value="{{this.userData.email}}" />
 		</div>
 		<div class='form-control'>
 			<label for='userName'>Name:</label>
-			<input type='text' name='userName' id='userName'/>
+			<input
+				{{#isError validationErrors 'userName'}}
+					class="invalid"
+				{{/isError}}
+				type='text' 
+				name='userName' 
+				id='userName'
+				value="{{this.userData.userName}}" />
 		</div>
 		<div class='form-control'>
 			<label for='password'>Password:</label>
-			<input type='password' name='password' id='password' />
+			<input 
+				{{#isError validationErrors 'password'}}
+					class="invalid"
+				{{/isError}}
+				type='password' 
+				name='password'
+				id='password' 
+				value="{{this.userData.password}}" />
 		</div>
-    <div class='form-control'>
+		<div class='form-control'>
 			<label for='repeated_password'>Confirm password:</label>
-			<input type='password' name='repeated_password' id='repeated_password' />
+			<input
+				{{#isError validationErrors 'repeated_password'}}
+					class="invalid"
+				{{/isError}}
+				type='password'
+				name='repeated_password'
+				id='repeated_password'
+				value="{{this.userData.repeated_password}}"
+			/>
 		</div>
-    <div class="btn-area">
-			<input type="hidden" name="csrfToken" value={{@root.csrf}}>
-		  <button type='submit'>Sign up</button>
-    </div>
+		<div class='btn-area'>
+			<input type='hidden' name='csrfToken' value={{@root.csrf}} />
+			<button type='submit'>Sign up</button>
+		</div>
 	</form>
-	<div class="error__container">
-		{{#if errorPassword}}
-			<h3>{{errorPassword}}</h3>
-		{{/if}}
-		{{#if errorUserExists}}
-			<h3>{{errorUserExists}}</h3>
+	<div class='error__container'>
+		{{#if errorValidation}}
+			<h3>{{errorValidation}}</h3>
 		{{/if}}
 	</div>
 </main>

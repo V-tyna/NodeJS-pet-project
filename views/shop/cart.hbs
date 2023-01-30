@@ -32,7 +32,11 @@
 </table>
 <form action="/create-order", method="POST" class="create__order__form">
   <label for="address">Delivery Address: </label>
-  <input id="address" name="address" minlength="10"/>
+  <input
+    {{#if errorMessage}} class="invalid" {{/if}}
+    id="address" 
+    name="address" 
+    minlength="10" />
   <div class="create__order__button__area">
     <input type="hidden" name="csrfToken" value={{@root.csrf}}>
     <button class="btn" type="submit"> Make an order</button> 

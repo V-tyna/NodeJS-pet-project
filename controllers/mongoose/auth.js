@@ -1,24 +1,28 @@
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const sgMail = require('@sendgrid/mail');
+const { validationResult } = require('express-validator');
 
-const { createMessage } = require('../../configs/sendGridMessage');
+const {
+	sendSignupEmail,
+	sendResetPasswordEmail,
+} = require('../../utils/sendEmail');
 const { createToken } = require('../../utils/createToken');
-const { SENDGRID_API_KEY } = require('../../configs/keys.dev');
 
 const User = require('../../models/mongoose/user');
-
-sgMail.setApiKey(SENDGRID_API_KEY);
 
 module.exports = {
 	getLoginPage: (req, res, next) => {
 		try {
+			const data = req.flash('userData');
+
 			createToken(res);
 			return res.render('auth/login', {
-				errorMessage: req.flash('error'),
-				isAuthenticated: req.session.isLoggedIn,
+				errorMessage: req.flash('errorValidation'),
 				formCSS: true,
+				isAuthenticated: req.session.isLoggedIn,
 				pageTitle: 'Login Page',
+				userData: data ? data[0] : null,
+				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
 			console.log('Login page rendering error: ', e);
@@ -64,13 +68,15 @@ module.exports = {
 	},
 	getSignupPage: (req, res, next) => {
 		try {
+			const data = req.flash('userData');
 			createToken(res);
 			return res.render('auth/signup', {
-				errorUserExists: req.flash('errorUserExists'),
-				errorPassword: req.flash('errorPassword'),
-				isAuthenticated: req.session.isLoggedIn,
+				errorValidation: req.flash('errorValidation'),
 				formCSS: true,
+				isAuthenticated: req.session.isLoggedIn,
 				pageTitle: 'Signup Page',
+				userData: data ? data[0] : null,
+				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
 			console.log('Sign up render error: ', e);
@@ -79,19 +85,17 @@ module.exports = {
 	postLoginPage: async (req, res, next) => {
 		try {
 			const { email, password } = req.body;
-			const user = await User.findOne({ email: email });
-			if (user) {
-				const doMatch = await bcrypt.compare(password, user.password);
-				if (doMatch) {
-					req.session.user = user;
-					req.session.isLoggedIn = true;
-					await req.session.save();
-					return res.redirect('/');
-				}
-			} else {
-				req.flash('error', 'Invalid email or password.');
-				return res.redirect('/login');
-			}
+			
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				req.flash('validationErrors', errors.array());
+				req.flash('userData', { email, password });
+				req.flash('errorValidation', errors.array()[0].msg);
+				return res.status(422).redirect('/login');
+			} 
+
+			return res.redirect('/');
 		} catch (e) {
 			console.log('Login page rendering error: ', e);
 		}
@@ -146,20 +150,8 @@ module.exports = {
 					user.resetToken = token;
 					user.resetTokenExp = Date.now() + 900000;
 					await user.save();
-					try {
-						const msg = createMessage(
-							email,
-							'Password reset',
-							'This is link for resetting your password.',
-							user.name,
-							`<h4>Please follow the link to reset your password: </h4><a href='http://localhost:3000/reset/${token}'>reset password</a>`
-						);
-						await sgMail.send(msg);
-						console.log('Email was sent.');
-						return res.redirect('/');
-					} catch (e) {
-						console.log('Sending email from SendGrid error: ', e);
-					}
+					sendResetPasswordEmail(email, user.name, token);
+					return res.redirect('/');
 				}
 			});
 		}
@@ -167,42 +159,27 @@ module.exports = {
 	postSignup: async (req, res, next) => {
 		try {
 			const { email, userName, password, repeated_password } = req.body;
-			if (password === repeated_password) {
-				const candidate = await User.findOne({ email: email });
-				if (candidate) {
-					req.flash(
-						'errorUserExists',
-						`User with this email ${email} already exists.`
-					);
-					return res.redirect('/signup');
-				} else {
-					const hashPassword = await bcrypt.hash(password, 12);
-					const user = new User({
-						cart: { items: [] },
-						email,
-						name: userName,
-						password: hashPassword,
-					});
-					await user.save();
-					try {
-						const msg = createMessage(
-							email,
-							'Account created!',
-							'Your account was successfully created',
-							userName,
-							'Your account on Node pet project platform was successfully created.'
-						);
-						await sgMail.send(msg);
-						console.log('Email was sent.');
-					} catch (e) {
-						console.log('Sending email from SendGrid error: ', e);
-					}
-					return res.redirect('/login');
-				}
-			} else {
-				req.flash('errorPassword', 'Passwords do not match.');
-				return res.redirect('/signup');
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				req.flash('validationErrors', errors.array());
+				req.flash('userData', { email, userName, password, repeated_password });
+				req.flash('errorValidation', errors.array()[0].msg);
+				return res.status(422).redirect('/signup');
 			}
+
+			const hashPassword = await bcrypt.hash(password, 12);
+			const user = new User({
+				cart: { items: [] },
+				email,
+				name: userName,
+				password: hashPassword,
+			});
+			await user.save();
+
+			sendSignupEmail(email, userName);
+
+			return res.redirect('/login');
 		} catch (e) {
 			console.log('Sign up post error: ', e);
 		}

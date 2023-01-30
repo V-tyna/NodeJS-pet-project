@@ -2,11 +2,25 @@
 	<form class='form-container' action='/login' method='POST'>
 		<div class='form-control'>
 			<label for='email'>Email</label>
-			<input type='text' name='email' id='email' />
+			<input 
+				{{#isError validationErrors 'email'}}
+					class="invalid"
+				{{/isError}}
+				type='text'
+				name='email' 
+				id='email' 
+				value="{{this.userData.email}}"/>
 		</div>
 		<div class='form-control'>
 			<label for='password'>Password:</label>
-			<input type='password' name='password' id='password' />
+			<input 
+				{{#isError validationErrors 'password'}}
+					class="invalid"
+				{{/isError}}
+				type='password' 
+				name='password'
+				id='password' 
+				value="{{this.userData.password}}"/>
 		</div>
 		<div class='btn-area'>
 			<input type='hidden' name='csrfToken' value={{@root.csrf}} />

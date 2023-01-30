@@ -17,6 +17,13 @@ module.exports = {
     prices.push(result);
     return '' + result.toFixed(2);
   },
+  isError(a, b, options) {
+    if (a.find(errorObj => errorObj.param === b)) {
+      return options.fn(this);
+    } else {
+      return options.inverse(this);
+    }
+  },
   isUndefined(a, options) {
     if (a === undefined) {
       return options.fn(this);

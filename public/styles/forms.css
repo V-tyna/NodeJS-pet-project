@@ -73,3 +73,7 @@ button:active {
   border: 1px solid #90ADC6;
   color: #333652;
 }
+
+.invalid {
+  background-color: #fa2c2c36;
+}

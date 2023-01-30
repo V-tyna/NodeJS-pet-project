@@ -1,23 +1,44 @@
-<main>
+<div>
 	<form class='product-form' action={{#if editing}}'/admin/edit-product'{{else}}'/admin/add-product'{{/if}} method='POST'>
 		<div class='form-control'>
 			<label for='title'>Title:</label>
-			<input type='text' name='title' id='title' value="{{#if editing}}{{product.title}}{{/if}}" />
+			<input 
+				{{#isError validationErrors 'title'}}
+					class="invalid"
+				{{/isError}}
+				type='text' name='title' id='title' value="{{product.title}}" />
 		</div>
 		<div class='form-control'>
 			<label for='imageUrl'>Image URL:</label>
-			<input type='text' name='imageUrl' id='imageUrl' value="{{#if editing}}{{product.imageUrl}}{{/if}}" />
+			<input 
+				{{#isError validationErrors 'imageUrl'}}
+					class="invalid"
+				{{/isError}}
+				type='text' name='imageUrl' id='imageUrl' value="{{product.imageUrl}}" />
 		</div>
 		<div class='form-control'>
 			<label for='price'>Price:</label>
-			<input type='number' step="0.01" name='price' id='price' value="{{#if editing}}{{product.price}}{{/if}}" />
+			<input 
+				{{#isError validationErrors 'price'}}
+					class="invalid"
+				{{/isError}}
+				type='number' step="0.01" name='price' id='price' value="{{product.price}}" />
 		</div>
 		<div class='form-control'>
 			<label for='description'>Description:</label>
-			<textarea name='description' id='description' rows="5">{{#if editing}}{{product.description}}{{/if}}</textarea>
+			<textarea 
+				{{#isError validationErrors 'description'}}
+					class="invalid"
+				{{/isError}}
+				name='description' id='description' rows="5">{{product.description}}</textarea>
 		</div>
     {{#if editing}}<input type="hidden" name="productId" value={{product._id}}>{{/if}}
 		<input type="hidden" name="csrfToken" value={{@root.csrf}}>
 		<button type='submit'>{{#if editing}}Update Product{{else}}Add Product{{/if}}</button>
 	</form>
+		<div class='error__container'>
+			{{#if errorValidation}}
+				<h3>{{errorValidation}}</h3>
+			{{/if}}
+		</div>
 </main>
