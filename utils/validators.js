@@ -51,7 +51,7 @@ module.exports = {
 	],
 	productValidators: [
 		body('title', 'Field "Title" should not be empty.').trim().not().isEmpty(),
-		body('imageUrl', 'Field "imageUrl" should not be empty.').trim().not().isEmpty(),
+		body('imageUrl', 'Field "imageUrl" should be an url-link and not be empty.').trim().isURL().not().isEmpty(),
 		body('price', 'Field "Price" should be a number.').trim().isFloat(),
 		body('description', 'Field "description" should not be empty.').trim().not().isEmpty(),
 	],

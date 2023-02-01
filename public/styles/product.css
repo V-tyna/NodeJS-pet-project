@@ -86,6 +86,10 @@ main {
   outline: 1px solid #90ADC6;
 }
 
+.btn {
+  margin-left: 10px;
+}
+
 button {
   font: inherit;
   font-weight: 600;
@@ -94,7 +98,6 @@ button {
   background: #FAD02C;
   border-radius: 5px;
   cursor: pointer;
-  margin: 10px;
   height: 35px;
   padding: 5px;
 }

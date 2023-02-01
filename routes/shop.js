@@ -11,6 +11,7 @@ const {
 	postCart,
 	postDeleteProductFromCart,
 	postOrder,
+	getInvoice,
 } = require('../controllers/mongoose/shop');
 const { cartValidators } = require('../utils/validators');
 
@@ -27,6 +28,8 @@ shopRouter.get('/orders', isAuth,  getOrders);
 shopRouter.get('/products', getProducts);
 
 shopRouter.get('/products/:productId', getProductById);
+
+shopRouter.get('/orders/:orderId', isAuth, getInvoice);
 
 shopRouter.post('/cart', isAuth, postCart);
 

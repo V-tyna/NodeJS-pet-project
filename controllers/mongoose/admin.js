@@ -81,7 +81,6 @@ module.exports = {
 				return res.status(422).redirect('/admin/add-product');
 			}
 			const product = new Product({
-				_id: Types.ObjectId('63d00687e2b0c213454968d9'),
 				description,
 				imageUrl,
 				price,

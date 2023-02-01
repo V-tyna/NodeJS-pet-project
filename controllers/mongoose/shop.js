@@ -1,5 +1,9 @@
 const { validationResult } = require('express-validator');
 
+const fs = require('fs');
+const path = require('path');
+const pdfDocument = require('pdfkit');
+
 const { createToken } = require('../../utils/createToken');
 
 const deepClone = require('../../utils/deepClone');
@@ -56,6 +60,42 @@ module.exports = {
 			});
 		} catch (e) {
 			getError('Get products in index/home page error: ', e);
+		}
+	},
+	getInvoice: async (req, res, next) => {
+		try {
+			const { orderId } = req.params;
+			const order = await Order.findById(orderId);
+
+			if (!order) {
+				return next(new Error('No order found!'));
+			}
+			if (order.userId.toString() !== req.user._id.toString()) {
+				return next(new Error('Unauthorized!'));
+			}
+
+			const invoiceName = 'invoice-' + order._id + '.pdf';
+			const invoicePath = path.join('data', 'invoices', invoiceName);
+
+			const pdfDoc = new pdfDocument();
+			pdfDoc.pipe(fs.createWriteStream(invoicePath));
+			pdfDoc.pipe(res);
+			pdfDoc.fontSize(20).text('Invoice', { underline: true });
+			pdfDoc.fontSize(14).text(`Order number: ${orderId}`);
+			pdfDoc.fontSize(12).text(`Data: ${new Date(order.createdAt).toUTCString()}`);
+      pdfDoc.text('______________________________________________________________');
+      order.orderData.forEach(prod => {
+        pdfDoc.text(`Title: ${prod.title}`);
+        pdfDoc.text(`Price: ${prod.price}$`);
+        pdfDoc.text(`Quantity: ${prod.quantity}`);
+        pdfDoc.text('---');
+      });
+      pdfDoc.text('______________________________________________________________');
+      pdfDoc.text(`Delivery address: ${order.address}`);
+			pdfDoc.fontSize(14).text(`Total order price: ${order.totalPrice}`);
+			pdfDoc.end();
+		} catch (e) {
+			getError('Get Invoice error: ', e);
 		}
 	},
 	getOrders: async (req, res, next) => {
@@ -131,7 +171,7 @@ module.exports = {
 			if (!errors.isEmpty()) {
 				req.flash('errorValidation', errors.array()[0].msg);
 				return res.status(422).redirect('/cart');
-			} 
+			}
 
 			const user = await req.user.populate(['cart.items.productId']);
 			const cartProducts = user.cart.items.map((el) => ({

@@ -35,3 +35,8 @@ h1 {
   text-align: center;
   color: #333652;
 }
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+}

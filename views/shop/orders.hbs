@@ -22,7 +22,10 @@
         </tbody>
       </table>
       <p>Delivery address: {{this.address}}</p>
-      <b>Total order price: <span class="number__price">{{this.totalPrice}}$</span></b>
+      <div class="order-footer">
+        <b>Total order price: <span class="number__price">{{this.totalPrice}}$</span></b>
+        <a href="/orders/{{_id}}" target="_blank">Download invoice</a>
+      </div>
     </div>
     {{/each}}
   </div>
