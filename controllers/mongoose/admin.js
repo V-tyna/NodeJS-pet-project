@@ -93,18 +93,17 @@ module.exports = {
 			getError('Add product POST error: ', e);
 		}
 	},
-	postDeleteProduct: async (req, res, next) => {
+	deleteProduct: async (req, res, next) => {
 		try {
-			const { productId } = req.body;
+			const { productId } = req.params;
 			await Product.findOneAndDelete({
 				_id: productId,
 				userId: req.user._id,
 			});
 			await req.user.deleteProductFromTheCart(productId);
-			return res.redirect('/admin/products-list');
+			return res.status(200).json({ message: 'Success!' });
 		} catch (e) {
-			console.log();
-			getError('Deleting product error: ', e);
+			res.status(500).json({ message: 'Deleting product failed.' });
 		}
 	},
 	postEditProduct: async (req, res, next) => {

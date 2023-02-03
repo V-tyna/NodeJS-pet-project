@@ -14,19 +14,30 @@
 					<div class='card__content'>
 						<h2 class='product__price'>{{this.price}}$</h2>
 						<p class='product__description'>
-							{{#reduceDescription this.description}}{{/reduceDescription}}
+							{{#reduceDescription
+								this.description
+							}}{{/reduceDescription}}
 						</p>
 					</div>
 					<div class='card__actions'>
 						<a href='/admin/edit-product/{{this._id}}?edit=true'>
-							<button class='btn' type="submit">Edit</button>
+							<button class='btn' type='submit'>Edit</button>
 						</a>
-						<form action='/admin/delete-product' method='POST'>
-							<input type="hidden" name="productId" value={{this._id}}>
-							<input type="hidden" name="price" value={{this.price}}>
-							<input type="hidden" name="csrfToken" value={{@root.csrf}}>
-							<button class='btn' type="submit">Delete</button>
-						</form>
+						<input
+							type='hidden'
+							name='productId'
+							value={{this._id}}
+						/>
+						<input
+							type='hidden'
+							name='csrfToken'
+							value={{@root.csrf}}
+						/>
+						<button
+							class='btn'
+							type='button'
+							onclick='deleteProduct(this)'
+						>Delete</button>
 					</div>
 				</article>
 			{{/each}}
@@ -35,3 +46,5 @@
 		<h1>No products yet...</h1>
 	{{/if}}
 </main>
+
+<script src='/js/admin.js'></script>

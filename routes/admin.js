@@ -2,12 +2,12 @@ const { Router } = require('express');
 
 const isAuth = require('../middleware/isAuth');
 const {
+	deleteProduct,
 	getAddProduct,
-	postAddProduct,
-	getProducts,
 	getEditProduct,
+	getProducts,
+	postAddProduct,
 	postEditProduct,
-	postDeleteProduct,
 } = require('../controllers/mongoose/admin');
 const { productValidators } = require('../utils/validators');
 
@@ -23,6 +23,6 @@ adminRouter.post('/add-product',isAuth, productValidators, postAddProduct);
 
 adminRouter.post('/edit-product', isAuth, productValidators, postEditProduct);
 
-adminRouter.post('/delete-product', isAuth, postDeleteProduct);
+adminRouter.delete('/product/:productId', isAuth, deleteProduct);
 
 module.exports = adminRouter;
