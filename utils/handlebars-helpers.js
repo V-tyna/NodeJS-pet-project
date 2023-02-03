@@ -24,6 +24,13 @@ module.exports = {
       return options.inverse(this);
     }
   },
+  isNotEqual(a, b, options) {
+    if (a !== b) {
+      return options.fn(this);
+    } else {
+      return options.inverse(this);
+    }
+  },
   isUndefined(a, options) {
     if (a === undefined) {
       return options.fn(this);

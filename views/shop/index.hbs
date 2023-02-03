@@ -28,4 +28,19 @@
 	{{else}}
 		<h1>No products yet...</h1>
 	{{/if}}
+	<div class="pagination-area">
+		{{#if hasPreviousPage}}
+			<a href="/?page={{previousPage}}" id="prev">Prev</a>
+		{{/if}}
+		{{#isNotEqual currentPage 1}}
+			<a href="/?page=1">1</a>
+		{{/isNotEqual}}
+		<a href="/?page={{currentPage}}" id="active-pagination-page">{{currentPage}}</a>
+		{{#isNotEqual currentPage lastPage}}
+			<a href="/?page={{lastPage}}">{{lastPage}}</a>
+		{{/isNotEqual}}
+		{{#if hasNextPage}}
+			<a href="/?page={{nextPage}}" id="next">Next</a>
+		{{/if}}
+	</div>
 </main>

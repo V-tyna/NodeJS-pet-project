@@ -261,3 +261,31 @@ button:active {
 .invalid {
   background-color: #fa2c2c36;
 }
+
+.pagination-area {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-area a {
+  text-decoration: none;
+  margin-right: 20px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  width: 30px;
+  height: 30px;
+  color: #333652;
+  border: 1px solid #90ADC6;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.pagination-area a:hover,
+.pagination-area a:active, 
+#active-pagination-page {
+  background-color: #90ADC6;
+}
+
+#prev, #next {
+  width: 70px;
+}

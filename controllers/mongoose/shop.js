@@ -1,15 +1,14 @@
 const { validationResult } = require('express-validator');
 
-const fs = require('fs');
-const path = require('path');
-const pdfDocument = require('pdfkit');
-
 const { createToken } = require('../../utils/createToken');
 
+const createPDF = require('../../configs/createPDF');
 const deepClone = require('../../utils/deepClone');
 const getError = require('../../utils/getError');
 const Order = require('../../models/mongoose/order');
 const Product = require('../../models/mongoose/product');
+
+const ITEMS_PER_PAGE = 3;
 
 module.exports = {
 	getCart: async (req, res, next) => {
@@ -50,13 +49,25 @@ module.exports = {
 	getIndex: async (req, res, next) => {
 		try {
 			createToken(res);
-			const products = await Product.find();
+
+			const { page } = req.query;
+			const totalProducts = await Product.find().countDocuments();
+			const products = await Product.find()
+				.skip((+page - 1) * ITEMS_PER_PAGE)
+				.limit(ITEMS_PER_PAGE);
+				
 			const prods = deepClone(products);
 			return res.render('shop/index', {
 				activeShop: true,
+				currentPage: +page,
+				hasNextPage: totalProducts > +page * ITEMS_PER_PAGE,
+				hasPreviousPage: +page > 1,
 				isAuthenticated: req.session.isLoggedIn,
-				prods,
+				lastPage: Math.ceil(totalProducts/ITEMS_PER_PAGE),
+				nextPage: +page + 1,
 				pageTitle: 'Home page',
+				previousPage: +page - 1,
+				prods,
 			});
 		} catch (e) {
 			getError('Get products in index/home page error: ', e);
@@ -74,26 +85,8 @@ module.exports = {
 				return next(new Error('Unauthorized!'));
 			}
 
-			const invoiceName = 'invoice-' + order._id + '.pdf';
-			const invoicePath = path.join('data', 'invoices', invoiceName);
-
-			const pdfDoc = new pdfDocument();
-			pdfDoc.pipe(fs.createWriteStream(invoicePath));
-			pdfDoc.pipe(res);
-			pdfDoc.fontSize(20).text('Invoice', { underline: true });
-			pdfDoc.fontSize(14).text(`Order number: ${orderId}`);
-			pdfDoc.fontSize(12).text(`Data: ${new Date(order.createdAt).toUTCString()}`);
-      pdfDoc.text('______________________________________________________________');
-      order.orderData.forEach(prod => {
-        pdfDoc.text(`Title: ${prod.title}`);
-        pdfDoc.text(`Price: ${prod.price}$`);
-        pdfDoc.text(`Quantity: ${prod.quantity}`);
-        pdfDoc.text('---');
-      });
-      pdfDoc.text('______________________________________________________________');
-      pdfDoc.text(`Delivery address: ${order.address}`);
-			pdfDoc.fontSize(14).text(`Total order price: ${order.totalPrice}`);
-			pdfDoc.end();
+			createPDF(order, res);
+			
 		} catch (e) {
 			getError('Get Invoice error: ', e);
 		}
