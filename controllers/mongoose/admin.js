@@ -20,7 +20,7 @@ module.exports = {
 				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
-			getError('Rendering Add product page error', e);
+			getError('Rendering Add product page error', e, next);
 		}
 	},
 	getEditProduct: async (req, res, next) => {
@@ -49,7 +49,7 @@ module.exports = {
 				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
-			getError('Product page error. Possibly that product not found.', e);
+			getError('Product page error. Possibly that product not found.', e, next);
 		}
 	},
 	getProducts: async (req, res, next) => {
@@ -64,7 +64,7 @@ module.exports = {
 				prods,
 			});
 		} catch (e) {
-			getError('Get products in Admin page error: ', e);
+			getError('Get products in Admin page error: ', e, next);
 		}
 	},
 	postAddProduct: async (req, res, next) => {
@@ -90,7 +90,7 @@ module.exports = {
 			await product.save();
 			return res.status(201).redirect('/admin/products-list');
 		} catch (e) {
-			getError('Add product POST error: ', e);
+			getError('Add product POST error: ', e, next);
 		}
 	},
 	deleteProduct: async (req, res, next) => {
@@ -131,7 +131,7 @@ module.exports = {
 			);
 			return res.redirect('/admin/products-list');
 		} catch (e) {
-			getError('Update product error: ', e);
+			getError('Update product error: ', e, next);
 		}
 	},
 };

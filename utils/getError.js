@@ -1,4 +1,4 @@
-module.exports = (message, e) => {
+module.exports = (message, e, next) => {
   console.log(message, e);
     const error = new Error({
       error: e,

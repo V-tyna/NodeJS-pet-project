@@ -9,6 +9,7 @@ const userSchema = new Schema({
 			},
 		],
 	},
+	delivery_address: String,
 	email: {
 		type: String,
 		required: true,
@@ -55,6 +56,11 @@ userSchema.methods.deleteProductFromTheCart = function(id) {
 userSchema.methods.cleanCart = function(id) {
 	const updatedCart = { items: [] };
 	this.cart = updatedCart;
+	return this.save();
+}
+
+userSchema.methods.cleanDeliveryAddress = function(id) {
+	this.delivery_address = null;
 	return this.save();
 }
 

@@ -25,7 +25,7 @@ module.exports = {
 				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
-			getError('Login page rendering error: ', e);
+			getError('Login page rendering error: ', e, next);
 		}
 	},
 	getResetPage: (req, res, next) => {
@@ -38,7 +38,7 @@ module.exports = {
 				pageTitle: 'Reset password Page',
 			});
 		} catch (e) {
-			getError('Reset password render error: ', e);
+			getError('Reset password render error: ', e, next);
 		}
 	},
 	getResetAccessPage: async (req, res, next) => {
@@ -63,7 +63,7 @@ module.exports = {
 				res.redirect('/reset');
 			}
 		} catch (e) {
-			getError('Reset access page render error: ', e);
+			getError('Reset access page render error: ', e, next);
 		}
 	},
 	getSignupPage: (req, res, next) => {
@@ -79,7 +79,7 @@ module.exports = {
 				validationErrors: req.flash('validationErrors'),
 			});
 		} catch (e) {
-			getError('Sign up render error: ', e);
+			getError('Sign up render error: ', e, next);
 		}
 	},
 	postLoginPage: async (req, res, next) => {
@@ -97,7 +97,7 @@ module.exports = {
 
 			return res.redirect('/');
 		} catch (e) {
-			getError('Login page rendering error: ', e);
+			getError('Login page rendering error: ', e, next);
 		}
 	},
 	postLogout: async (req, res, next) => {
@@ -106,7 +106,7 @@ module.exports = {
 			await req.session.destroy();
 			return res.redirect('/');
 		} catch (e) {
-			getError('Logout error: ', e);
+			getError('Logout error: ', e, next);
 		}
 	},
 	postResetAccess: async (req, res, next) => {
@@ -132,7 +132,7 @@ module.exports = {
 				return res.redirect(`/reset/${token}`);
 			}
 		} catch (e) {
-			getError('POST reset access page error: ', e);
+			getError('POST reset access page error: ', e, next);
 		}
 	},
 	postResetPage: async (req, res, next) => {
@@ -161,7 +161,7 @@ module.exports = {
 				});
 			}
 		} catch (e) {
-			getError('POST reset page error: ', e);
+			getError('POST reset page error: ', e, next);
 		}
 	},
 	postSignup: async (req, res, next) => {
@@ -189,7 +189,7 @@ module.exports = {
 
 			return res.redirect('/login');
 		} catch (e) {
-			getError('Sign up post error: ', e);
+			getError('Sign up post error: ', e, next);
 		}
 	},
 };

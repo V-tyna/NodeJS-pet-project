@@ -30,7 +30,7 @@
     <th class="cart__price" colspan="5">{{#getTotalPrice}}{{/getTotalPrice}}$</th>
   </tr>
 </table>
-<form action="/create-order", method="POST" class="create__order__form">
+<form action="/checkout", method="POST" class="create__order__form">
   <label for="address">Delivery Address: </label>
   <input
     {{#if errorMessage}} class="invalid" {{/if}}

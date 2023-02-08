@@ -1,0 +1,53 @@
+.checkout__table {
+	width: 55vw;
+	margin: 20px auto;
+}
+
+.checkout__card__header {
+	height: 50px;
+	background-color: #90adc665;
+	font-size: 1.1rem;
+}
+
+.checkout__card__body {
+	color: #333652;
+}
+
+.checkout__image img {
+	height: 50px;
+}
+
+.checkout__price {
+  padding-right: 124px;
+  text-align: end;
+}
+
+.checkout__delete_form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+  height: 50px;
+  width: 40px;
+}
+
+.create__order__form {
+  width: 55vw;
+	margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.create__order__button__area {
+  width: 55vw;
+	margin: 20px auto;
+  display: flex;
+  justify-content: end;
+}
+
+h1 {
+  text-align: center;
+}
+

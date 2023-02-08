@@ -1,1 +1,31 @@
 <h1>Checkout page</h1>
+{{#if products.length}}
+<table class="checkout__table">
+ <tr class="checkout__card__header">
+    <th></th>
+    <th>Product name</th>
+    <th>Price</th>
+    <th>Quantity</th>
+    <th>Common price</th>
+  </tr>
+{{#each products}}
+  <tr class="checkout__card__body">
+    <th class="checkout__image"><img src="{{this.imageUrl}}" alt="{{this.title}}"></th>
+    <th class="checkout__text"><p>{{this.title}}</p></th>
+    <th class="checkout__text"><p>{{this.price}}</p></th>
+    <th class="checkout__text"><b>{{this.quantity}}</b></th>
+    <th class="checkout__text"><b>{{#countPrice this.price this.quantity}}{{/countPrice}}</b></th>
+  </tr>
+{{/each}}
+  <tr class="checkout__card__header">
+    <th>Total price</th>
+    <th class="checkout__price" colspan="5">{{#getTotalPrice}}${{/getTotalPrice}}</th>
+  </tr>
+</table>
+{{/if}}
+<div class="create__order__button__area">
+  <input type="hidden" name="sessionId" id="sessionId" value={{sessionId}}>
+  <button id="order-button" class="btn">Order</button>
+</div>
+<script src="https://js.stripe.com/v3/"></script>
+<script src='/js/stripe.js'></script>
