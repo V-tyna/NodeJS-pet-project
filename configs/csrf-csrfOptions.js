@@ -1,8 +1,8 @@
-const { CSRF_CSRF_SECRET } = require('./keys.dev');
+const keys = require('./keys');
 
 module.exports = {
   options: {
-    getSecret: () => CSRF_CSRF_SECRET,
+    getSecret: () => keys.CSRF_CSRF_SECRET,
     cookieName: 'csrf',
     getTokenFromRequest: req => {
       if (req.body.csrfToken) { 

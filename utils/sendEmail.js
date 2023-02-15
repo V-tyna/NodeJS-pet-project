@@ -1,9 +1,10 @@
 const sgMail = require('@sendgrid/mail');
 
 const { createMessage } = require('../configs/sendGridMessage');
-const { SENDGRID_API_KEY } = require('../configs/keys.dev');
 
-sgMail.setApiKey(SENDGRID_API_KEY);
+const keys = require('../configs/keys');
+
+sgMail.setApiKey(keys.SENDGRID_API_KEY);
 
 module.exports = {
   sendSignupEmail: async (email, userName) => {

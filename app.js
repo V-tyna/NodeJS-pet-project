@@ -13,12 +13,12 @@ const path = require('path');
 const session = require('express-session');
 
 const { getPageNotFound } = require('./controllers/error');
-const { MONGO_URL_MONGOOSE, COOKIE_PARSER_SECRET } = require('./configs/keys.dev');
 const { options } = require('./configs/csrf-csrfOptions');
 
 const adminRouter = require('./routes/admin');
 const authRouter = require('./routes/auth');
 const errorRouter = require('./routes/errors');
+const keys = require('./configs/keys');
 const shopRouter = require('./routes/shop');
 const User = require('./models/mongoose/user');
 
@@ -44,9 +44,9 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 
 const { doubleCsrfProtection } = doubleCsrf(options);
 
-app.use(cookieParser(COOKIE_PARSER_SECRET));
+app.use(cookieParser(keys.COOKIE_PARSER_SECRET));
 const store = new MongoDBStore({
-	uri: MONGO_URL_MONGOOSE,
+	uri: keys.MONGO_URL_MONGOOSE,
 	collection: 'sessions',
 });
 
@@ -105,7 +105,7 @@ app.use((error, req, res, next) => {
 const start = async () => {
 	try {
 		mongoose.set('strictQuery', true);
-		await mongoose.connect(MONGO_URL_MONGOOSE);
+		await mongoose.connect(keys.MONGO_URL_MONGOOSE);
 		console.log('Mongoose successfully connected.');
 		app.listen(3000, () => {
 			console.log('Server is running on port: 3000.');

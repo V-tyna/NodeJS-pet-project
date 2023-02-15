@@ -1,10 +1,10 @@
-const { EMAIL_FROM } = require('./keys.dev');
+const keys = require('./keys');
 
 module.exports = {
   createMessage: (email, subject, text, name, mainMessage) => {
     return {
       to: email, 
-      from: EMAIL_FROM,
+      from: keys.EMAIL_FROM,
       subject,
       text,
       html: `<h4>Hello, ${name}!</h4>

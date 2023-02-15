@@ -1,10 +1,11 @@
 const { Sequelize } = require('sequelize');
-const { MYSQL_PASSWORD } = require('../configs/keys.dev');
+
+const keys = require('../configs/keys');
 
 const sequelize = new Sequelize(
 	'node-complete-schwarzmuller',
 	'root',
-	MYSQL_PASSWORD,
+	keys.MYSQL_PASSWORD,
 	{
 		dialect: 'mysql',
 		host: 'localhost',

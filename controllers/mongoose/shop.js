@@ -1,9 +1,9 @@
 const { validationResult } = require('express-validator');
 
 const { createToken } = require('../../utils/createToken');
-const { STRIPE_SECURE_KEY } = require('../../configs/keys.dev');
 
-const stripe = require('stripe')(STRIPE_SECURE_KEY);
+const keys = require('../../configs/keys');
+const stripe = require('stripe')(keys.STRIPE_SECURE_KEY);
 
 const createPDF = require('../../configs/createPDF');
 const deepClone = require('../../utils/deepClone');
