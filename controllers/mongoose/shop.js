@@ -52,6 +52,16 @@ module.exports = {
 			const user = await req.user.populate(['cart.items.productId']);
 			user.delivery_address = req.body.address;
 			await user.save();
+
+			const cartProducts = user.cart.items.map((el) => ({
+				_id: el.productId._id,
+				description: el.productId.description,
+				imageUrl: el.productId.imageUrl,
+				price: el.productId.price,
+				title: el.productId.title,
+				quantity: el.quantity,
+			}));
+			const products = deepClone(cartProducts);
 		
 			const line_items = user.cart.items.map((prod) => ({
 				price_data: {

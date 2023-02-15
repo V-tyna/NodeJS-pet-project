@@ -26,6 +26,8 @@ const app = express();
 app.use(
 	helmet.contentSecurityPolicy({
 		directives: {
+			defaultSrc: ["'self'", "https://js.stripe.com/v3/"],
+			"script-src": ["'self'", "https://js.stripe.com/v3/"],
 			'img-src': ["'self'", 'https://m.media-amazon.com/images/I/'],
 		},
 	})

@@ -31,3 +31,4 @@ During the course I also wrote server-client apps using RestAPI and GraphQL.
 <img width="800" alt="cart" src="https://user-images.githubusercontent.com/78938313/219065015-62d21aca-2d97-4cb7-af48-92e76db76a38.JPG" />
 <img width="800" alt="orders" src="https://user-images.githubusercontent.com/78938313/219065151-86d6a64b-a159-4af0-884f-a04c758b52cb.JPG" />
 <img width="800" alt="admin-page" src="https://user-images.githubusercontent.com/78938313/219065246-e7484213-08a9-40e6-8848-d33ebb83e6cf.JPG" />
+<img width="800" alt="paiment-page" src="https://user-images.githubusercontent.com/78938313/219074879-5b1ea65a-fec2-480a-99a0-7906e47b8d04.JPG" />
