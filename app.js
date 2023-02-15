@@ -8,7 +8,6 @@ const flash = require('connect-flash');
 const fs = require('fs');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
-const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 
@@ -24,11 +23,6 @@ const User = require('./models/mongoose/user');
 
 const app = express();
 
-const accessLogStream = fs.createWriteStream(
-	path.join(__dirname, 'access.log'),
-	{ flags: 'a' }
-);
-
 app.use(
 	helmet.contentSecurityPolicy({
 		directives: {
@@ -38,7 +32,6 @@ app.use(
 );
 
 app.use(compression());
-app.use(morgan('combined', { stream: accessLogStream }));
 
 const MongoDBStore = require('connect-mongodb-session')(session);
 
