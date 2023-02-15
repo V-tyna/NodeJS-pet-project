@@ -1,10 +1,14 @@
-const { doubleCsrf } = require("csrf-csrf");
+const { doubleCsrf } = require('csrf-csrf');
 
+const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const flash = require('connect-flash');
+const fs = require('fs');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 
@@ -20,14 +24,30 @@ const User = require('./models/mongoose/user');
 
 const app = express();
 
+const accessLogStream = fs.createWriteStream(
+	path.join(__dirname, 'access.log'),
+	{ flags: 'a' }
+);
+
+app.use(
+	helmet.contentSecurityPolicy({
+		directives: {
+			'img-src': ["'self'", 'https://m.media-amazon.com/images/I/'],
+		},
+	})
+);
+
+app.use(compression());
+app.use(morgan('combined', { stream: accessLogStream }));
+
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const { doubleCsrfProtection } = doubleCsrf(options);
 
 app.use(cookieParser(COOKIE_PARSER_SECRET));
 const store = new MongoDBStore({
-	uri:  MONGO_URL_MONGOOSE,
-	collection: 'sessions'
+	uri: MONGO_URL_MONGOOSE,
+	collection: 'sessions',
 });
 
 app.engine(
@@ -46,12 +66,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-	secret: 'It is a secret value',
-	resave: false,
-	saveUninitialized: false,
-	store
-}));
+app.use(
+	session({
+		secret: 'It is a secret value',
+		resave: false,
+		saveUninitialized: false,
+		store,
+	})
+);
 
 app.use(async (req, res, next) => {
 	try {
@@ -60,7 +82,7 @@ app.use(async (req, res, next) => {
 			req.user = user;
 		}
 		next();
-	} catch(e) {
+	} catch (e) {
 		console.log('Storing user in req error: ', e);
 	}
 });
@@ -76,7 +98,7 @@ app.use(getPageNotFound);
 app.use((error, req, res, next) => {
 	res.status(500).render('500', {
 		title: 'Error page 500',
-		isAuthenticated: req.session.isLoggedIn
+		isAuthenticated: req.session.isLoggedIn,
 	});
 });
 
@@ -88,9 +110,9 @@ const start = async () => {
 		app.listen(3000, () => {
 			console.log('Server is running on port: 3000.');
 		});
-	 } catch(e) {
+	} catch (e) {
 		console.log('Starting app error: ', e);
-	 }
-}
+	}
+};
 
 start();
