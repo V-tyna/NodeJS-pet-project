@@ -1,5 +1,5 @@
 # Book store 
-## You csn try it by teh link - https://book-shop-5505.onrender.com
+## You can try it by the link - https://book-shop-5505.onrender.com
 
 *Notice*: To see additional pages on the site, you should be registered. Please, use signup form to register. (Don't forget to check your email). To change password if you forget you may have access to email, because you'll receive the letter with instruction.
 Also you may use existed profile to sign in: 
@@ -23,7 +23,7 @@ Password - 123456
 - Renderer (deploy)
 - Additionally: bcryptjs, middleware, validation, sessions, csrf-csrf, handlebars custom conditional operators, uuid, morgan, compression, helmet, multer, pdfkit, cookie-parser, connect-flash, postman
 
-During the course I also wrote server-client apps using RestAPI and GraphQL.
+During the course I also wrote server-client apps using RestAPI, GraphQL and Socket.io. Tried testing with Mocha, Chai and Sinon.
 
 ## Screenshots: 
 
